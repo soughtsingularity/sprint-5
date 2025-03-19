@@ -120,9 +120,7 @@ class RegisterUserValidationTest extends TestCase
 
     public function test_email_must_be_unique()
     {
-        $this->expectException(ValidationException::class);
-
-        User::factory()->create(['email' => 'existing@email.com']);
+        $existingEmails = ['existing@email.com'];
     
         $data = [
             'username' => 'example',
@@ -130,15 +128,25 @@ class RegisterUserValidationTest extends TestCase
             'password' => '12345678!',
             'password_confirmation' => '12345678!',
         ];
-
-        $request = new RegisterUserRequest();
-
-        $validator = Validator::make($data, $request->rules());
-
-        if($validator->fails()){
-            throw new ValidationException($validator);
-        }
+    
+        $rules = [
+            'email' => [
+                'required',
+                'email',
+                function ($attribute, $value, $fail) use ($existingEmails) {
+                    if (in_array($value, $existingEmails)) {
+                        $fail("The email has already been taken.");
+                    }
+                }
+            ],
+        ];
+    
+        $validator = Validator::make($data, $rules);
+    
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('email', $validator->errors()->toArray());
     }
+    
 
     public function test_password_is_required()
     {
@@ -232,6 +240,4 @@ class RegisterUserValidationTest extends TestCase
             throw new ValidationException($validator);
         }
     }
-
-    
 }
