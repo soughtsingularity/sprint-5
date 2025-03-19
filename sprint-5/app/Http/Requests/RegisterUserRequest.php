@@ -22,7 +22,7 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|min:2',
+            'username' => 'required|min:2|max:20',
         ];
     }
 }
