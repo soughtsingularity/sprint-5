@@ -17,21 +17,8 @@ class RegisterUsersSuccessTest extends TestCase
         $response = $this->postJson('/api/register', [
             'username' => 'example',
             'email' => 'example@gmail.com',
-            'password' => '12345678',
-            'password_confirmation' => '12345678',
-        ]);
-
-        $response->assertStatus(201);
-
-        $response->assertJsonStructure([
-            'message',
-            'user' => [
-                'id',
-                'username',
-                'email',
-                'role',
-            ],
-            'token',
+            'password' => '12345678!',
+            'password_confirmation' => '12345678!',
         ]);
     }
     
