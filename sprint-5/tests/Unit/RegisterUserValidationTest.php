@@ -117,5 +117,27 @@ class RegisterUserValidationTest extends TestCase
             throw new ValidationException($validator);
         }
     }
+
+    public function test_email_must_be_unique()
+    {
+        $this->expectException(ValidationException::class);
+
+        User::factory()->create(['email' => 'existing@email.com']);
+    
+        $data = [
+            'username' => 'example',
+            'email' => 'existing@email.com',
+            'password' => '12345678',
+            'password_confirmation' => '12345678',
+        ];
+
+        $request = new RegisterUserRequest();
+
+        $validator = Validator::make($data, $request->rules());
+
+        if($validator->fails()){
+            throw new ValidationException($validator);
+        }
+    }
     
 }
