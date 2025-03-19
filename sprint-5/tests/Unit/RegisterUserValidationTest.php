@@ -139,5 +139,26 @@ class RegisterUserValidationTest extends TestCase
             throw new ValidationException($validator);
         }
     }
+
+    public function test_password_is_required()
+    {
+        $data = [
+            'username' => 'example',
+            'email' => 'example@gmail.com',
+            'password' => '',
+            'password_confirmation' => '',
+        ];
+
+        $request = new RegisterUserRequest();
+        $request->merge($data);
+
+        $this->expectException(ValidationException::class);
+
+        $validator = Validator::make($request->all(), $request->rules());
+
+        if($validator->fails()){
+            throw new ValidationException($validator);
+        }
+    }
     
 }
