@@ -12,7 +12,7 @@ class RegisterUsersSuccessTest extends TestCase
 
     public function test_user_can_register_and_receive_token()
     {
-        //$this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $response = $this->postJson('/api/register', [
             'username' => 'example',
@@ -22,5 +22,17 @@ class RegisterUsersSuccessTest extends TestCase
         ]);
 
         $response->assertStatus(201);
+
+        $response->assertJsonStructure([
+            'message',
+            'user' => [
+                'id',
+                'username',
+                'email',
+                'role',
+            ],
+            'token',
+        ]);
     }
+    
 }
