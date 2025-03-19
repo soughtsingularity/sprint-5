@@ -4,8 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
-use Laravel\Passport\Passport;
-use Carbon\Carbon;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,8 +21,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Request::macro('expectsJson', fn () => true);
-        Passport::hashClientSecrets();
-        Passport::tokensExpireIn(Carbon::now()->addDays(15));
-        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
+      
     }
 }
