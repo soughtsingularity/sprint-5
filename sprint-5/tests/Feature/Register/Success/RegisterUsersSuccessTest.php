@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class RegisterUsersSuccessTest extends TestCase
 {
-    public function test_user_can_register_and_receive_token()
+    public function test_user_can_register()
     {
         $this->withoutExceptionHandling();
 
