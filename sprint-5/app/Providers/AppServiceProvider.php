@@ -6,8 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 use Laravel\Passport\Passport;
 
+Passport::hashClientSecrets();
+
 class AppServiceProvider extends ServiceProvider
 {
+    
     /**
      * Register any application services.
      */
@@ -22,12 +25,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Request::macro('expectsJson', fn () => true);
-        Passport::loadKeysFrom(__DIR__.'/../secrets/oauth');
-        Passport::hashClientSecrets();
         Passport::tokensExpireIn(now()->addDays(15));
         Passport::refreshTokensExpireIn(now()->addDays(30));
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
+        Passport::enablePasswordGrant();
+        Passport::hashClientSecrets();
+        Passport::enableImplicitGrant();
 
-      
+
+
     }
 }
