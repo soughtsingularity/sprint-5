@@ -19,5 +19,10 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
             'role' => 'user',
         ]);
+
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user' => $user,
+        ], 201);
     }
 }
