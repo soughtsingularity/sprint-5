@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class RegisterUsersSuccessTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_user_can_register_and_receive_token()
     {
         $this->withoutExceptionHandling();
@@ -21,7 +19,8 @@ class RegisterUsersSuccessTest extends TestCase
             'password_confirmation' => '12345678!',
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201)
+            ->assertJsonStructure(['message', 'user']);
         
     }
 }

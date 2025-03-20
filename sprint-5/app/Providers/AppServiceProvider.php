@@ -22,5 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Request::macro('expectsJson', fn () => true);
+
     }
 }
