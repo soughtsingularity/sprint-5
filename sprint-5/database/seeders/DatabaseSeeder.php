@@ -15,9 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $role = Role::create(['name' => 'user']);
-        $permission = Permission::create(['name' => 'enroll_course' ]);
-        $role->givePermissionTo($permission);
+        $this->call(RolesAndPermissionsSeeder::class);
+
 
         User::factory()->create([
             'username' => 'test_user',
