@@ -20,6 +20,8 @@ class RegisterController extends Controller
             'role' => 'user',
         ]);
 
+        $user->assignRole('user');
+
         return response()->json([
             'message' => 'User registered successfully',
             'user' => $user,
