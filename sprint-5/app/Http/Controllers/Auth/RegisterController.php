@@ -22,9 +22,12 @@ class RegisterController extends Controller
 
         $user->assignRole('user');
 
+        $token = $user->createToken('authToken')->accessToken;
+
         return response()->json([
             'message' => 'User registered successfully',
             'user' => $user,
+            'token' => $token,
         ], 201);
     }
 }

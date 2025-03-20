@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Database\Seeders\RolesAndPermissionsSeeder;
+use Laravel\Passport\ClientRepository;
 
 class RegisterUsersSuccessTest extends TestCase
 {
@@ -18,6 +19,13 @@ class RegisterUsersSuccessTest extends TestCase
         parent::setUp();
 
         $this->seed(RolesAndPermissionsSeeder::class);
+        $clientRepository = new ClientRepository();
+        $client = $clientRepository->createPersonalAccessClient(
+            null, 'Test Personal Access Client', 'http://localhost');
+            config(['passport.personal_access_client.id' => $client->id]);
+            config(['passport.personal_access_client.secret' => $client->secret]);        
+
+        
     }
     public function test_user_can_register()
     {
@@ -75,8 +83,34 @@ class RegisterUsersSuccessTest extends TestCase
 
         $this->assertEquals($user->hasRole('user'), true);
 
-
     }
 
+    public function test_user_receive_access_token_after_registration()
+    {
+        $userData = [
+            'username' => 'testuser',
+            'email' => 'test@example.com',
+            'password' => 'password123!',
+            'password_confirmation' => 'password123!',
+        ];
+
+        $response = $this->postJson('/api/register', $userData);
+
+        $response->assertStatus(201)
+            ->assertJsonStructure([
+                'message', 
+                'user' => [
+                    'id',
+                    'username',
+                    'email',
+                    'created_at',
+                    'updated_at',
+                ],
+                'token',
+            ]);
+
+            $token = $response['token'];
+            $this->assertNotNull($token);
+    }
 }
 
