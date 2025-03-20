@@ -75,6 +75,10 @@ return [
         'web' => 'web',
         'api' => 'api', 
     ],
+    'defaults' => [
+        'guard' => 'web', 
+        'passwords' => 'users',
+],
 
 
     'column_names' => [
