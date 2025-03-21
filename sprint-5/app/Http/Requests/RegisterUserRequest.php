@@ -22,10 +22,30 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => 'required|min:2|max:20',
+            'username' => 'required|string|min:2|max:20',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|regex:/[!@#$%^&*()\-_=+{};:,<.>]/|confirmed',
-            'password_confirmation' => 'required',
+            'password' => 'required|string|min:8|regex:/[!@#$%^&*()\-_=+{};:,<.>]/|confirmed',
         ];
     }
+
+    public function messages()
+{
+    return [
+        'username.required' => 'The username field is required.',
+        'username.min' => 'The username must be at least 2 characters.',
+        'username.max' => 'The username must not be greater than 20 characters.',
+
+        'email.required' => 'The email field is required.',
+        'email.email' => 'The email must be a valid email address.',
+        'email.unique' => 'The email has already been taken.',
+
+        'password.required' => 'The password field is required.',
+        'password.min' => 'The password must be at least 8 characters.',
+        'password.regex' => 'The password must contain at least one special character.',
+        'password.confirmed' => 'The password confirmation does not match.',
+    ];
+}
+
+
+
 }
