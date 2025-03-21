@@ -116,4 +116,68 @@ class RegisterUserFailTest extends TestCase
 
         }
     }
+
+    public function test_user_cannot_register_with_invalid_password(){
+
+        $testCases = [
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'example@example.com',
+                    'password' => '',
+                    'password_confirmation' => '',
+                ],
+                'errorField' => 'password',
+                'errorMessage' => 'The password field is required.',
+            ],
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'example@example.com',
+                    'password' => 'passwo!',
+                    'password_confirmation' => 'passwo!',
+                ],
+                'errorField' => 'password',
+                'errorMessage' => 'The password must be at least 8 characters.',
+            ],
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'example@example.com',
+                    'password' => 'Password123',
+                    'password_confirmation' => 'Password123',
+                ],
+                'errorField' => 'password',
+                'errorMessage' => 'The password must contain at least one special character.',
+            ],
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'example@example.com',
+                    'password' => 'Password123!',
+                    'password_confirmation' => '',
+                ],
+                'errorField' => 'password',
+                'errorMessage' => 'The password confirmation does not match.',
+            ],
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'example@example.com',
+                    'password' => 'Password123!',
+                    'password_confirmation' => 'password1564!',
+                ],
+                'errorField' => 'password',
+                'errorMessage' => 'The password confirmation does not match.',
+            ],
+        ];
+
+        foreach($testCases as $case){
+            $response = $this->postJson('/api/register', $case['data']);
+
+            $response->assertStatus(422)
+                     ->assertJsonValidationErrors($case['errorField'])
+                     ->assertJsonFragment([$case['errorMessage']]);
+        }
+    }
 }
