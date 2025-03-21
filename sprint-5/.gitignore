@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/secrets
 /vendor
 .env
 .env.backup
