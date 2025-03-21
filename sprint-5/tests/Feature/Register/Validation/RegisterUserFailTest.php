@@ -7,6 +7,7 @@ use Laravel\Passport\ClientRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 
 class RegisterUserFailTest extends TestCase
 {
@@ -64,6 +65,55 @@ class RegisterUserFailTest extends TestCase
             $response->assertStatus(422)
                      ->assertJsonValidationErrors($case['errorField'])
                      ->assertJsonFragment([$case['errorMessage']]);
+        }
+    }
+
+    public function test_user_cannot_register_with_invalid_email()
+    {
+
+        User::factory()->create(['email' => 'duplicate@example.com']);
+
+        $testCases = [
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => '',
+                    'password' => 'Password123!',
+                    'password_confirmation' => 'Password123!',
+                ],
+                'errorField' => 'email',
+                'errorMessage' => 'The email field is required.',
+            ],
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'invalid@',
+                    'password' => 'Password123!',
+                    'password_confirmation' => 'Password123!',
+                ],
+                'errorField' => 'email',
+                'errorMessage' => 'The email must be a valid email address.',
+            ],
+            [
+                'data' => [
+                    'username' => 'example',
+                    'email' => 'duplicate@example.com',
+                    'password' => 'Password123!',
+                    'password_confirmation' => 'Password123!',
+                ],
+                'errorField' => 'email',
+                'errorMessage' => 'The email has already been taken.',
+            ],
+                
+        ];
+
+        foreach($testCases as $case) {
+            $response = $this->postJson('/api/register', $case['data']);
+
+            $response->assertStatus(422)
+                     ->assertJsonValidationErrors($case['errorField'])
+                     ->assertJsonFragment([$case['errorMessage']]);
+
         }
     }
 }
