@@ -63,5 +63,23 @@ class LoginUserValidationTest extends TestCase
         }    
     }
 
+    public function test_password_must_have_at_least_8_characters()
+    {
+        $data = [
+            'email' => 'example@example.com',
+            'password' => 'asdc!',
+        ];
+
+        $request = new LoginUserRequest();
+        $request->merge($data);
+
+        $this->expectException(ValidationException::class);
+
+        $validator = Validator::make($request->all(), $request->rules());
+        if($validator->fails()){
+            throw new ValidationException($validator);
+        }    
+    }
+
     
 }
