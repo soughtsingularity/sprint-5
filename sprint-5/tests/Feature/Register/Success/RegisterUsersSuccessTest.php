@@ -2,15 +2,13 @@
 
 namespace Tests\Feature\Register\Success;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Laravel\Passport\ClientRepository;
+use Tests\ApiTestCase;
 
-class RegisterUsersSuccessTest extends TestCase
+class RegisterUsersSuccessTest extends ApiTestCase
 {
     protected function setUp(): void
     {
@@ -30,7 +28,7 @@ class RegisterUsersSuccessTest extends TestCase
 
         $response = $this->postJson('/api/register', [
             'username' => 'example',
-            'email' => 'example@gmail.com',
+            'email' => 'example@example.com',
             'password' => '12345678!',
             'password_confirmation' => '12345678!',
         ]);
