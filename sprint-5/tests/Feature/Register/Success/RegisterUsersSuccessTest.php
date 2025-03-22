@@ -12,8 +12,6 @@ use Laravel\Passport\ClientRepository;
 
 class RegisterUsersSuccessTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -88,8 +86,8 @@ class RegisterUsersSuccessTest extends TestCase
     public function test_user_receive_access_token_after_registration()
     {
         $userData = [
-            'username' => 'testuser',
-            'email' => 'test@example.com',
+            'username' => 'testuser2',
+            'email' => 'test2@example.com',
             'password' => 'password123!',
             'password_confirmation' => 'password123!',
         ];
