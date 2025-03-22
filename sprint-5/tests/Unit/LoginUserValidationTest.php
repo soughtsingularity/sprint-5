@@ -26,4 +26,22 @@ class LoginUserValidationTest extends TestCase
             throw new ValidationException($validator);
         }    
     }
+
+    public function test_email_is_valid()
+    {
+        $data = [
+            'email' => 'example',
+            'password' => '12345678!',
+        ];
+
+        $request = new LoginUserRequest();
+        $request->merge($data);
+
+        $this->expectException(ValidationException::class);
+
+        $validator = Validator::make($request->all(), $request->rules());
+        if($validator->fails()){
+            throw new ValidationException($validator);
+        }    
+    }
 }
