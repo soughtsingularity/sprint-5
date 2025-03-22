@@ -3,31 +3,53 @@
 namespace Tests\Feature\Feature\Register\Validation;
 
 use Tests\TestCase;
+use Tests\ApiTestCase;
 use Laravel\Passport\ClientRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-class RegisterUserFailTest extends TestCase
+class RegisterUserFailTest extends ApiTestCase
 {
-
-    protected function setUp(): void
+    #[DataProvider('invalidUsernameProvider')]
+    public function test_user_cannot_register_with_invalid_username(array $data, string $errorField, string $errorMessage)
     {
-        parent::setUp();
+        $response = $this->postJson('/api/register', $data);
 
-        $this->seed(RolesAndPermissionsSeeder::class);
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            null, 'Test Personal Access Client', 'http://localhost');
-            config(['passport.personal_access_client.id' => $client->id]);
-            config(['passport.personal_access_client.secret' => $client->secret]);        
-        
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors($errorField)
+                ->assertJsonFragment([$errorMessage]);
     }
-    public function test_user_cannot_register_with_invalid_username()
+
+    #[DataProvider('invalidEmailProvider')]
+    public function test_user_cannot_register_with_invalid_email(array $data, string $errorField, string $errorMessage)
     {
-        $testCases = [
-            [
+
+        User::factory()->create(['email' => 'duplicate@example.com']);
+
+        $response = $this->postJson('/api/register', $data);
+    
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors($errorField)
+                 ->assertJsonFragment([$errorMessage]);
+    }
+
+    #[DataProvider('invalidPasswordProvider')]
+    public function test_user_cannot_register_with_invalid_password(array $data, string $errorField, string $errorMessage)
+    {
+        $response = $this->postJson('/api/register', $data);
+    
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors($errorField)
+                 ->assertJsonFragment([$errorMessage]);
+    }
+    public static function invalidUsernameProvider(): array
+    {
+        return [
+            
+            'Username is required' => [
                 'data' => [
                     'username' => '',
                     'email' => 'valid@example.com',
@@ -37,7 +59,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'username',
                 'errorMessage' => 'The username field is required.',
             ],
-            [
+            'Username must be at least 2 characters' => [
                 'data' => [
                     'username' => 'a',
                     'email' => 'valid@example.com',
@@ -47,7 +69,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'username',
                 'errorMessage' => 'The username must be at least 2 characters.',
             ],
-            [
+            'Username must not be greater than 20 characters' => [
                 'data' => [
                     'username' => str_repeat('a', 21),
                     'email' => 'valid@example.com',
@@ -58,23 +80,13 @@ class RegisterUserFailTest extends TestCase
                 'errorMessage' => 'The username must not be greater than 20 characters.',
             ],
         ];
-    
-        foreach ($testCases as $case) {
-            $response = $this->postJson('/api/register', $case['data']);
-    
-            $response->assertStatus(422)
-                     ->assertJsonValidationErrors($case['errorField'])
-                     ->assertJsonFragment([$case['errorMessage']]);
-        }
+
     }
 
-    public function test_user_cannot_register_with_invalid_email()
+    public static function invalidEmailProvider(): array
     {
-
-        User::factory()->create(['email' => 'duplicate@example.com']);
-
-        $testCases = [
-            [
+        return [
+            'Email is required' => [
                 'data' => [
                     'username' => 'example',
                     'email' => '',
@@ -84,7 +96,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'email',
                 'errorMessage' => 'The email field is required.',
             ],
-            [
+            'Email must be a valid email address' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'invalid@',
@@ -94,7 +106,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'email',
                 'errorMessage' => 'The email must be a valid email address.',
             ],
-            [
+            'Email has already been taken' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'duplicate@example.com',
@@ -104,23 +116,13 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'email',
                 'errorMessage' => 'The email has already been taken.',
             ],
-                
         ];
-
-        foreach($testCases as $case) {
-            $response = $this->postJson('/api/register', $case['data']);
-
-            $response->assertStatus(422)
-                     ->assertJsonValidationErrors($case['errorField'])
-                     ->assertJsonFragment([$case['errorMessage']]);
-
-        }
     }
-
-    public function test_user_cannot_register_with_invalid_password(){
-
-        $testCases = [
-            [
+    
+    public static function invalidPasswordProvider(): array
+    {
+        return [
+            'Password is required' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'example@example.com',
@@ -130,7 +132,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'password',
                 'errorMessage' => 'The password field is required.',
             ],
-            [
+            'Password must be at least 8 characters' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'example@example.com',
@@ -140,7 +142,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'password',
                 'errorMessage' => 'The password must be at least 8 characters.',
             ],
-            [
+            'Password must contain at least one special character' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'example@example.com',
@@ -150,7 +152,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'password',
                 'errorMessage' => 'The password must contain at least one special character.',
             ],
-            [
+            'Password confirmation does not match (empty confirmation)' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'example@example.com',
@@ -160,7 +162,7 @@ class RegisterUserFailTest extends TestCase
                 'errorField' => 'password',
                 'errorMessage' => 'The password confirmation does not match.',
             ],
-            [
+            'Password confirmation does not match (different passwords)' => [
                 'data' => [
                     'username' => 'example',
                     'email' => 'example@example.com',
@@ -171,13 +173,5 @@ class RegisterUserFailTest extends TestCase
                 'errorMessage' => 'The password confirmation does not match.',
             ],
         ];
-
-        foreach($testCases as $case){
-            $response = $this->postJson('/api/register', $case['data']);
-
-            $response->assertStatus(422)
-                     ->assertJsonValidationErrors($case['errorField'])
-                     ->assertJsonFragment([$case['errorMessage']]);
-        }
     }
 }
