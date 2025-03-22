@@ -43,6 +43,9 @@ class LoginUsersSucccessTest extends ApiTestCase
                 'email' => $user->email,
             ],
         ]);
+
+        $token = $response->json('token');
+        $this->assertNotNull($token, 'The token should not be null.');
     }
 
 
