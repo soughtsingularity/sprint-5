@@ -2,17 +2,15 @@
 
 namespace Tests\Feature\Feature\Register\Validation;
 
-use Tests\TestCase;
 use Tests\ApiTestCase;
-use Laravel\Passport\ClientRepository;
-use Illuminate\Foundation\Testing\WithFaker;
-use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class RegisterUserFailTest extends ApiTestCase
 {
+    use RefreshDatabase;
+
     #[DataProvider('invalidUsernameProvider')]
     public function test_user_cannot_register_with_invalid_username(array $data, string $errorField, string $errorMessage)
     {
@@ -62,7 +60,7 @@ class RegisterUserFailTest extends ApiTestCase
             'Username must be at least 2 characters' => [
                 'data' => [
                     'username' => 'a',
-                    'email' => 'valid@example.com',
+                    'email' => 'valid2@example.com',
                     'password' => 'Password123!',
                     'password_confirmation' => 'Password123!',
                 ],
@@ -72,7 +70,7 @@ class RegisterUserFailTest extends ApiTestCase
             'Username must not be greater than 20 characters' => [
                 'data' => [
                     'username' => str_repeat('a', 21),
-                    'email' => 'valid@example.com',
+                    'email' => 'valid3@example.com',
                     'password' => 'Password123!',
                     'password_confirmation' => 'Password123!',
                 ],

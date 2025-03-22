@@ -2,18 +2,14 @@
 
 namespace Tests\Feature\Register\Success;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Laravel\Passport\ClientRepository;
+use Tests\ApiTestCase;
 
-class RegisterUsersSuccessTest extends TestCase
+class RegisterUsersSuccessTest extends ApiTestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,7 +28,7 @@ class RegisterUsersSuccessTest extends TestCase
 
         $response = $this->postJson('/api/register', [
             'username' => 'example',
-            'email' => 'example@gmail.com',
+            'email' => 'example@example.com',
             'password' => '12345678!',
             'password_confirmation' => '12345678!',
         ]);
@@ -88,8 +84,8 @@ class RegisterUsersSuccessTest extends TestCase
     public function test_user_receive_access_token_after_registration()
     {
         $userData = [
-            'username' => 'testuser',
-            'email' => 'test@example.com',
+            'username' => 'testuser2',
+            'email' => 'test2@example.com',
             'password' => 'password123!',
             'password_confirmation' => 'password123!',
         ];
