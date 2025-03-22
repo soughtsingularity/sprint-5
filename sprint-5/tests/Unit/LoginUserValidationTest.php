@@ -44,4 +44,24 @@ class LoginUserValidationTest extends TestCase
             throw new ValidationException($validator);
         }    
     }
+
+    public function test_password_is_required()
+    {
+        $data = [
+            'email' => 'example@example.com',
+            'password' => '',
+        ];
+
+        $request = new LoginUserRequest();
+        $request->merge($data);
+
+        $this->expectException(ValidationException::class);
+
+        $validator = Validator::make($request->all(), $request->rules());
+        if($validator->fails()){
+            throw new ValidationException($validator);
+        }    
+    }
+
+    
 }
