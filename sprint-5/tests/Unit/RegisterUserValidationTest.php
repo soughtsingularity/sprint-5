@@ -4,14 +4,13 @@ namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
 use App\Http\Requests\RegisterUserRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterUserValidationTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase;
 
     public function test_user_name_ir_required()    
     {
