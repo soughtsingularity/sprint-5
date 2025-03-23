@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(RolesAndPermissionsSeeder::class);
+        $this->call(PassportSeeder::class);
 
         if (!User::where('email', 'test@example.com')->exists()) {
             $user = User::factory()->create([
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
 
             $token = $user->createToken('Postman Token')->accessToken;
 
-            $this->command->info("📌 Passport token for Postman:");
+            $this->command->info("Passport token for Postman:");
             $this->command->info($token);
         }
     }
