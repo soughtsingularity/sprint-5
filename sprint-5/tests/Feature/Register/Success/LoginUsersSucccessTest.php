@@ -24,7 +24,7 @@ class LoginUsersSucccessTest extends ApiTestCase
             'email' => 'example@example.com',
             'password' => 'password123!',
         ]);
+
+        $response->assertStatus(200);
     }
-
-
 }
