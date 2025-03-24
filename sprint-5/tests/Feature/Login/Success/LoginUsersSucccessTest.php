@@ -94,7 +94,7 @@ class LoginUsersSucccessTest extends ApiTestCase
         $this->assertDatabaseHas('oauth_access_tokens', [
             'user_id' => $user->id,
             'name' => 'authToken',
-            'revoked' => 0 // No revocado
+            'revoked' => 0 
         ]);
     }
 }
