@@ -76,4 +76,25 @@ class LoginUsersSucccessTest extends ApiTestCase
             'email' => 'example@example.com'
         ]);
     }
+
+    public function test_user_token_stored_in_database()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create([
+            'email' => 'example@example.com',
+            'password' => bcrypt('password123!'),
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'example@example.com',
+            'password' => 'password123!',
+        ]);
+
+        $this->assertDatabaseHas('oauth_access_tokens', [
+            'user_id' => $user->id,
+            'name' => 'authToken',
+            'revoked' => 0 // No revocado
+        ]);
+    }
 }
