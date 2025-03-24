@@ -7,6 +7,7 @@ use App\Models\User;
 use Tests\ApiTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Constraints\HasInDatabase;
 
 class LoginUsersSucccessTest extends ApiTestCase
 {
@@ -15,7 +16,7 @@ class LoginUsersSucccessTest extends ApiTestCase
     {
         $this->withoutExceptionHandling();
 
-        $user = User::factory()->create([
+        User::factory()->create([
             'email' => 'example@example.com',
             'password' => bcrypt('password123!'),
         ]);
@@ -26,5 +27,27 @@ class LoginUsersSucccessTest extends ApiTestCase
         ]);
 
         $response->assertStatus(200);
+    }
+
+    public function test_user_can_login_and_receive_token()
+    {
+        $this->withoutExceptionHandling();
+
+        User::factory()->create([
+            'email' => 'example@example.com',
+            'password' => bcrypt('password123!'),
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'example@example.com',
+            'password' => 'password123!',
+        ]);
+
+        $response->assertStatus(200)
+                ->assertJsonStructure([
+                'message',
+                'user',
+                'token',
+        ]);
     }
 }

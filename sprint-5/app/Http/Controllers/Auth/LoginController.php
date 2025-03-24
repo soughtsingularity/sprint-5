@@ -12,12 +12,18 @@ class LoginController extends Controller
     public function login(LoginUserRequest $request)
     {
         $credentials = $request->validated();
+
+        if (!Auth::attempt($credentials)) {
+            response(401, 'Invalid credentials');
+        }
     
         $user = Auth::user();
-    
+        $token = $user->createToken('authToken')->accessToken;
+
         return response()->json([
             'message' => 'User logged in successfully',
             'user' => $user,
+            'token' => $token
         ], 200);
     }
 }
