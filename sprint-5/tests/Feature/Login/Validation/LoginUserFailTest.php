@@ -5,6 +5,7 @@ namespace Tests\Feature\Login\Validation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
 
 class LoginUserFailTest extends TestCase
 {
@@ -48,6 +49,26 @@ class LoginUserFailTest extends TestCase
             'null email' => [null, 'password123!'],
             'null password' => ['example@example.com', null],
         ];
+    }
+
+    public function test_user_exists_but_invalid_password()
+    {
+        User::factory()->create([
+            'email' => 'example@example.com',
+            'password' => bcrypt('correctPassword!'),
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'exampe@example.com',
+            'password' => 'wrongpassword!',
+        ]);
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'message' => 'Invalid credentials'
+        ]);
+
+
     }
 
 
