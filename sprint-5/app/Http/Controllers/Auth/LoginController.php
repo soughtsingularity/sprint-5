@@ -20,6 +20,7 @@ class LoginController extends Controller
         }
     
         $user = Auth::user();
+        
         $token = $user->createToken('authToken')->accessToken;
 
         return response()->json([
