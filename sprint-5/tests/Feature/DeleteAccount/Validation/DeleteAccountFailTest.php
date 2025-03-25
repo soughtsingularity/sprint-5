@@ -34,4 +34,24 @@ class DeleteAccountFailTest extends ApiTestCase
         ]);
      }
 
+        public function test_user_cannot_delete_account_with_invalid_token(): void
+        {
+            $user = User::factory()->create();
+            $user->assignRole('user');
+        
+            $invalidToken = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.invalid.signature';
+        
+            $response = $this->withHeaders([
+                'Authorization' => $invalidToken
+            ])->deleteJson("/api/users/{$user->id}");
+        
+            $response->assertStatus(401);
+        
+            $this->assertDatabaseHas('users', [
+                'id' => $user->id,
+            ]);
+        }
+     
+
+
 }
