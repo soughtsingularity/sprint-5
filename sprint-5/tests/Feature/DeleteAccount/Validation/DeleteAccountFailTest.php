@@ -51,6 +51,22 @@ class DeleteAccountFailTest extends ApiTestCase
                 'id' => $user->id,
             ]);
         }
+
+        public function test_user_without_user_role_cannot_delete_account(): void
+        {
+            $user = User::factory()->create();
+        
+            Passport::actingAs($user);
+        
+            $response = $this->deleteJson("/api/users/{$user->id}");
+        
+            $response->assertStatus(403);
+        
+            $this->assertDatabaseHas('users', [
+                'id' => $user->id,
+            ]);
+        }   
+
      
 
 
