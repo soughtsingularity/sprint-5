@@ -10,4 +10,4 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
 
 Route::middleware(['auth:api', 'role:user'])
-    ->delete('/user/{user}', [UserController::class, 'destroy']);
+    ->delete('/users/{user}', [UserController::class, 'destroy']);

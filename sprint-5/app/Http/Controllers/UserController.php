@@ -3,18 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function destroy(Request $request)
+    public function destroy(User $user)
     {
-        $user = $request->user();
-
-        $user->tokens()->delete();
+        $authenticatedUser = auth()->user();
     
+        if ($authenticatedUser->id !== $user->id) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+    
+        $user->tokens()->delete();
         $user->delete();
     
-        return response()->noContent();
+        return response()->noContent(); 
     }
-    
 }
