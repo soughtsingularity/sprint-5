@@ -16,6 +16,7 @@ class DeleteAccountTest extends ApiTestCase
     {
         $user = User::factory()->create();
         $user->assignRole('user');
+        $user->givePermissionTo('delete-account');
 
         Passport::actingAs($user);
 

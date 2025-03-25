@@ -65,9 +65,5 @@ class DeleteAccountFailTest extends ApiTestCase
             $this->assertDatabaseHas('users', [
                 'id' => $user->id,
             ]);
-        }   
-
-     
-
-
+        }
 }
