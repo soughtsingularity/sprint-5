@@ -61,15 +61,15 @@ class CreateCourseValidationTest extends ApiTestCase
                 ->assertJsonFragment([$errorMessage]);
     }
 
-    // #[DataProvider('invalidVideoDescriptionProvider')]
-    // public function test_course_creation_failed_with_invalid_video_description($data, $errorField, $errorMessage)
-    // {
-    //     $response = $this->postJson('/api/courses', $data);
+    #[DataProvider('invalidVideoDescriptionProvider')]
+    public function test_course_creation_failed_with_invalid_video_description($data, $errorField, $errorMessage)
+    {
+        $response = $this->postJson('/api/courses', $data);
 
-    //     $response->assertStatus(422)
-    //             ->assertJsonValidationErrors($errorField)
-    //             ->assertJsonFragment([$errorMessage]);
-    // }
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors($errorField)
+                ->assertJsonFragment([$errorMessage]);
+    }
 
     // #[DataProvider('invalidUsernameProvider')]
     // public function test_course_creation_failed_with_invalid_video_url($data, $errorField, $errorMessage)
@@ -295,10 +295,65 @@ class CreateCourseValidationTest extends ApiTestCase
         
     }
 
-    // public static function invalidVideoDescriptionProvider()
-    // {
+    public static function invalidVideoDescriptionProvider()
+    {
+        return [
+            
+            'description is required' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => '',
+                        'url' => 'https://www.youtube.com/watch?v=123456',
+                    ]],
+                ],
+                'errorField' => 'videos.0.description',
+                'errorMessage' => 'The Video description field is required.',
+            ],
+            'description must be a string' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => 123,
+                        'url' => 'https://www.youtube.com/watch?v=123456',
+                    ]],
+                ],
+                'errorField' => 'videos.0.description',
+                'errorMessage' => 'The Video description field must be a string.',
+            ],
+            'description must have at least 5 characters' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => '1234',
+                        'url' => 'https://www.youtube.com/watch?v=123456',
+                    ]],
+                ],
+                'errorField' => 'videos.0.description',
+                'errorMessage' => 'The Video description field must be at least 5 characters.',
+            ],
+            'description must not be greater than 255 characters' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => str_repeat('a', 256),
+                        'url' => 'https://www.youtube.com/watch?v=123456',
+                    ]],
+                ],
+                'errorField' => 'videos.0.description',
+                'errorMessage' => 'The Video description field must not be greater than 255 characters.',
+            ]
+        ];
         
-    // }
+    }
 
     // public static function invalidVideoUrlProvider()
     // {

@@ -53,7 +53,7 @@ class CourseCreateRequest extends FormRequest
             'videos.*.description.required' => 'The Video description field is required.',
             'videos.*.description.string' => 'The Video description field must be a string.',
             'videos.*.description.min' => 'The Video description field must be at least 5 characters.',
-            'videos.*.description.max' => 'The VIdeo description field must not be greater than 255 characters.',
+            'videos.*.description.max' => 'The Video description field must not be greater than 255 characters.',
             'videos.*.url.required' => 'The Video url field is required.',
             'videos.*.url.url' => 'The Video url format is invalid.',
         ];
