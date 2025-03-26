@@ -11,12 +11,10 @@ use Tests\ApiTestCase;
 
 class DeleteAccountFailTest extends ApiTestCase
 {
-    /**
-     * A basic feature test example.
-     */
 
         public function test_user_cannot_delete_other_user_account(): void
         {
+            
         $userA = User::factory()->create();
         $userA->assignRole('user');
 
