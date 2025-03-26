@@ -200,10 +200,40 @@ class CreateCourseValidationTest extends ApiTestCase
             ];
      }
 
-    // public static function invalidVideosProvider()
-    // {
+    public static function invalidVideosProvider()
+    {
+        return [
+            
+            'videos is required' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [],
+                ],
+                'errorField' => 'videos',
+                'errorMessage' => 'The videos field must have at least 1 item.',
+            ],
+            'videos must be an array' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => 'invalid',
+                ],
+                'errorField' => 'videos',
+                'errorMessage' => 'The videos field must be an array.',
+            ],
+            'videos must have at least 1 item' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [],
+                ],
+                'errorField' => 'videos',
+                'errorMessage' => 'The videos field must have at least 1 item.',
+            ],
+        ];
         
-    // }
+    }
 
     // public static function invalidVideoTitleProvider()
     // {

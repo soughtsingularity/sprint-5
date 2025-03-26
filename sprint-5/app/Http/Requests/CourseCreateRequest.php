@@ -24,10 +24,11 @@ class CourseCreateRequest extends FormRequest
         return [
             'title' => 'required|string|min:5|max:50',
             'description' => 'required|string|min:5|max:255',
-            'videos' => 'required|array|min:1',
-            'videos.*.title' => 'required|string|min:5|max:50',
-            'videos.*.description' => 'required|string|min:5|max:255',
-            'videos.*.url' => 'required|url'
+            'videos' => ['bail', 'present', 'array', 'min:1'],
+            'videos.*.title' => ['required', 'string', 'min:5', 'max:50'],
+            'videos.*.description' => ['required', 'string', 'min:5', 'max:255'],
+            'videos.*.url' => ['required', 'url'],
+
         ];
     }
 
