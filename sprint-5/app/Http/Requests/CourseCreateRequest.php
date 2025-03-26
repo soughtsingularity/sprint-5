@@ -30,4 +30,31 @@ class CourseCreateRequest extends FormRequest
             'videos.*.url' => 'required|url'
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'The title field is required.',
+            'title.string' => 'The title field must be a string.',
+            'title.min' => 'The title field must be at least 5 characters.',
+            'title.max' => 'The title field must not be greater than 50 characters.',
+            'description.required' => 'The description field is required.',
+            'description.string' => 'The description field must be a string.',
+            'description.min' => 'The description field must be at least 5 characters.',
+            'description.max' => 'The description field must not be greater than 255 characters.',
+            'videos.required' => 'The videos field is required.',
+            'videos.array' => 'The videos field must be an array.',
+            'videos.min' => 'The videos field must have at least 1 item.',
+            'videos.*.title.required' => 'The title field is required.',
+            'videos.*.title.string' => 'The title field must be a string.',
+            'videos.*.title.min' => 'The title field must be at least 5 characters.',
+            'videos.*.title.max' => 'The title field must not be greater than 50 characters.',
+            'videos.*.description.required' => 'The description field is required.',
+            'videos.*.description.string' => 'The description field must be a string.',
+            'videos.*.description.min' => 'The description field must be at least 5 characters.',
+            'videos.*.description.max' => 'The description field must not be greater than 255 characters.',
+            'videos.*.url.required' => 'The url field is required.',
+            'videos.*.url.url' => 'The url format is invalid.',
+        ];
+    }
 }
