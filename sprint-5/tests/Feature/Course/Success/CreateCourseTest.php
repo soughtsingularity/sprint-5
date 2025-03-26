@@ -20,6 +20,7 @@ class CreateCourseTest extends ApiTestCase
         $admin = User::where('email', 'admin@gmail.com')->first();
         Passport::actingAs($admin);
         $admin->assignRole('admin');
+        
 
         $courseData = [
             'title' => 'NewCoourse',
@@ -40,7 +41,7 @@ class CreateCourseTest extends ApiTestCase
         ];
 
         $response = $this->postJson('/api/courses', $courseData);
-
+        dd($response->json());
         $response->assertStatus(201)
                 ->assertJsonFragment([
                     'title' => $courseData['title'],
