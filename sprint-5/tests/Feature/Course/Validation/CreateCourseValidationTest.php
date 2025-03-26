@@ -71,15 +71,15 @@ class CreateCourseValidationTest extends ApiTestCase
                 ->assertJsonFragment([$errorMessage]);
     }
 
-    // #[DataProvider('invalidUsernameProvider')]
-    // public function test_course_creation_failed_with_invalid_video_url($data, $errorField, $errorMessage)
-    // {
-    //     $response = $this->postJson('/api/courses', $data);
+    #[DataProvider('invalidVideoUrlProvider')]
+    public function test_course_creation_failed_with_invalid_video_url($data, $errorField, $errorMessage)
+    {
+        $response = $this->postJson('/api/courses', $data);
 
-    //     $response->assertStatus(422)
-    //             ->assertJsonValidationErrors($errorField)
-    //             ->assertJsonFragment([$errorMessage]);
-    // }
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors($errorField)
+                ->assertJsonFragment([$errorMessage]);
+    }
 
     public static function invalidTitleProvider(): array
     {
@@ -355,8 +355,37 @@ class CreateCourseValidationTest extends ApiTestCase
         
     }
 
-    // public static function invalidVideoUrlProvider()
-    // {
+    public static function invalidVideoUrlProvider()
+    {
+        return [
+            
+            'url is required' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => 'Video 1 Description',
+                        'url' => '',
+                    ]],
+                ],
+                'errorField' => 'videos.0.url',
+                'errorMessage' => 'The Video url field is required.',
+            ],
+            'url format is invalid' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => 'ExampleDescription',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => 'Video 1 Description',
+                        'url' => 'invalid',
+                    ]],
+                ],
+                'errorField' => 'videos.0.url',
+                'errorMessage' => 'The Video url format is invalid.',
+            ],
+        ];
         
-    // }
+    }
 }
