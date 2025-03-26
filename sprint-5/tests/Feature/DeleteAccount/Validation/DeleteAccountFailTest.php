@@ -66,4 +66,21 @@ class DeleteAccountFailTest extends ApiTestCase
                 'id' => $user->id,
             ]);
         }
+
+        public function test_cannot_delete_nonexistent_user(): void
+        {
+            $user = User::factory()->create();
+            $user->assignRole('user');
+            $user->givePermissionTo('delete-account');
+        
+            Passport::actingAs($user);
+        
+            $nonExistentUserId = User::max('id') + 1;
+        
+            $response = $this->deleteJson("/api/users/{$nonExistentUserId}");
+        
+            $response->assertStatus(404);
+        }
+        
+
 }
