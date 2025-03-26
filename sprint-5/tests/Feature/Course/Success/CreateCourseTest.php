@@ -41,7 +41,7 @@ class CreateCourseTest extends ApiTestCase
         ];
 
         $response = $this->postJson('/api/courses', $courseData);
-        dd($response->json());
+
         $response->assertStatus(201)
                 ->assertJsonFragment([
                     'title' => $courseData['title'],
@@ -52,9 +52,15 @@ class CreateCourseTest extends ApiTestCase
                     'title',
                     'description',
                     'videos' => [
-                        'title', 'description', 'url'
-                    ]
+                        ['title', 'description', 'url']]
                 ]);
+                    
+                $this->assertDatabaseHas('courses', [
+                    'title' => $courseData['title'],
+                    'description' => $courseData['description']
+                ]);
+
+            
     }
 
 }
