@@ -51,15 +51,15 @@ class CreateCourseValidationTest extends ApiTestCase
                 ->assertJsonFragment([$errorMessage]);
     }
 
-    // #[DataProvider('invalidVideoTitleProvider')]
-    // public function test_course_creation_failed_with_invalid_video_title($data, $errorField, $errorMessage)
-    // {
-    //     $response = $this->postJson('/api/courses', $data);
+    #[DataProvider('invalidVideoTitleProvider')]
+    public function test_course_creation_failed_with_invalid_video_title($data, $errorField, $errorMessage)
+    {
+        $response = $this->postJson('/api/courses', $data);
 
-    //     $response->assertStatus(422)
-    //             ->assertJsonValidationErrors($errorField)
-    //             ->assertJsonFragment([$errorMessage]);
-    // }
+        $response->assertStatus(422)
+                ->assertJsonValidationErrors($errorField)
+                ->assertJsonFragment([$errorMessage]);
+    }
 
     // #[DataProvider('invalidVideoDescriptionProvider')]
     // public function test_course_creation_failed_with_invalid_video_description($data, $errorField, $errorMessage)
@@ -250,7 +250,7 @@ class CreateCourseValidationTest extends ApiTestCase
                     ]],
                 ],
                 'errorField' => 'videos.0.title',
-                'errorMessage' => 'The title field is required.',
+                'errorMessage' => 'The Video title field is required.',
             ],
             'title must be a string' => [
                 'data' => [
@@ -263,7 +263,7 @@ class CreateCourseValidationTest extends ApiTestCase
                     ]],
                 ],
                 'errorField' => 'videos.0.title',
-                'errorMessage' => 'The title field must be a string.',
+                'errorMessage' => 'The Video title field must be a string.',
             ],
             'title must have at least 5 characters' => [
                 'data' => [
@@ -276,7 +276,7 @@ class CreateCourseValidationTest extends ApiTestCase
                     ]],
                 ],
                 'errorField' => 'videos.0.title',
-                'errorMessage' => 'The title field must be at least 5 characters.',
+                'errorMessage' => 'The Video title field must be at least 5 characters.',
             ],
             'title must not be greater than 50 characters' => [
                 'data' => [
@@ -289,7 +289,7 @@ class CreateCourseValidationTest extends ApiTestCase
                     ]],
                 ],
                 'errorField' => 'videos.0.title',
-                'errorMessage' => 'The title field must not be greater than 50 characters.',
+                'errorMessage' => 'The Video title field must not be greater than 50 characters.',
             ],
         ];
         
