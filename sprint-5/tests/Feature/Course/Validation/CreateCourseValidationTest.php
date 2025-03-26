@@ -140,10 +140,65 @@ class CreateCourseValidationTest extends ApiTestCase
         ];
     }
 
-    // public static function invalidDescriptionProvider()
-    // {
+     public static function invalidDescriptionProvider()
+     {
+        return [
+            
+            'description is required' => [
+                'data' => [
+                    'title' => 'ExampleTitle',
+                    'description' => '',
+                    'videos' => [[
+                        'title' => 'Video 1',
+                        'description' => 'Video 1 Description',
+                        'url' => 'https://www.youtube.com/watch?v=123456',
+                    ]],
+                    ],
+                    'errorField' => 'description',
+                    'errorMessage' => 'The description field is required.',
+                ],
+                'description must be a string' => [
+                    'data' => [
+                        'title' => 'ExampleTitle',
+                        'description' => 123,
+                        'videos' => [[
+                            'title' => 'Video 1',
+                            'description' => 'Video 1 Description',
+                            'url' => 'https://www.youtube.com/watch?v=123456',
+                        ]],
+                    ],
+                    'errorField' => 'description',
+                    'errorMessage' => 'The description field must be a string.',
+                ],
+                'description must have at least 5 characters' => [
+                    'data' => [
+                        'title' => 'ExampleTitle',
+                        'description' => '1234',
+                        'videos' => [[
+                            'title' => 'Video 1',
+                            'description' => 'Video 1 Description',
+                            'url' => 'https://www.youtube.com/watch?v=123456',
+                        ]],
+                    ],
+                    'errorField' => 'description',
+                    'errorMessage' => 'The description field must be at least 5 characters.',
+                ],
+                'description must not be greater than 255 characters' => [
+                    'data' => [
+                        'title' => 'ExampleTitle',
+                        'description' => str_repeat('a', 256),
+                        'videos' => [[
+                            'title' => 'Video 1',
+                            'description' => 'Video 1 Description',
+                            'url' => 'https://www.youtube.com/watch?v=123456',
+                        ]],
+                    ],
+                    'errorField' => 'description',
+                    'errorMessage' => 'The description field must not be greater than 255 characters.',
+                ],
 
-    // }
+            ];
+     }
 
     // public static function invalidVideosProvider()
     // {
