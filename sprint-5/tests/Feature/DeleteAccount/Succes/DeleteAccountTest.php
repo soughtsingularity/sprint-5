@@ -20,7 +20,11 @@ class DeleteAccountTest extends ApiTestCase
 
         Passport::actingAs($user);
 
-        $response = $this->deleteJson('/api/users/' . $user->id);
+        $token = $user->createToken('authToken')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/users/' . $user->id);
 
         $response->assertStatus(204);
 
