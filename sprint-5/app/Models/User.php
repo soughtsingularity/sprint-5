@@ -50,4 +50,9 @@ class User extends Authenticatable
     }
 
     protected $guard_name = 'api'; 
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_user', 'user_id', 'course_id');
+    }
 }
