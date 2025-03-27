@@ -5,6 +5,7 @@ namespace Tests;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Passport\ClientRepository;
 use Database\Seeders\RolesAndPermissionsSeeder;
+use Illuminate\Support\Facades\DB;
 
 class ApiTestCase extends TestCase
 {

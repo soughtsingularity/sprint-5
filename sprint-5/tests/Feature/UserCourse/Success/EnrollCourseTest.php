@@ -7,9 +7,11 @@ use App\Models\Course;
 use Tests\ApiTestCase;
 use App\Models\User;
 use Laravel\Passport\Passport;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EnrollCourseTest extends ApiTestCase
 {
+    use RefreshDatabase;
     public function test_authenticated_user_can_enroll_in_a_course()
     {
         $this->withoutExceptionHandling();
@@ -36,8 +38,6 @@ class EnrollCourseTest extends ApiTestCase
             'course_id' => $course->id,
             'user_id' => $user->id,
         ]);
-    
-    
     }
 
 

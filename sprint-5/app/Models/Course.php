@@ -19,7 +19,7 @@ class Course extends Model
         'videos' => 'array'
     ];
 
-    protected function users()
+    public function users()
     {
         return $this->belongsToMany(User::class, 'course_user', 'course_id', 'user_id');
     }
