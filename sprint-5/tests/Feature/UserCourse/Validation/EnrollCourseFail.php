@@ -77,6 +77,26 @@ class EnrollCourseFail extends ApiTestCase
             ]);
     }
 
+    public function test_enroll_course_without_permission()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $course = Course::factory()->create();
+        $user->assignRole('user');
+
+        $token = $user->createToken('authToken')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson("/api/courses/{$course->id}/enroll");
+
+        $response->assertStatus(403)
+            ->assertJson([
+                'message' => 'Permission denied.'
+            ]);
+    }
+
 
 
 }
