@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Models\Course;
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,5 +36,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $admin->assignRole('admin');
+
+        $course = Course::factory()->create([
+            'title' => 'Test Course',
+            'description' => 'This is a test course',
+            'videos' => [
+                'title' => 'Test Video',
+                'description' => 'This is a test video',
+                'url' => 'https://www.youtube.com/watch?v=123456',
+            ]
+        ]);
     }
 }

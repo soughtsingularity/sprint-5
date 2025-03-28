@@ -19,8 +19,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $deleteAccountPermission = Permission::firstOrCreate(['name' => 'delete-account', 'guard_name' => 'api']);
         $createCoursePermission = Permission::firstOrCreate(['name' => 'create-course', 'guard_name' => 'api']);
+        $enrollCoursePermission = Permission::firstOrCreate(['name' => 'enroll-course', 'guard_name' => 'api']);
 
-        $userRole->givePermissionTo($deleteAccountPermission);
+
+        $userRole->givePermissionTo($deleteAccountPermission, $enrollCoursePermission);
+
         $adminRole->givePermissionTo($createCoursePermission);
     }
 }
