@@ -3,12 +3,12 @@
 namespace Tests\Feature\Login\Validation;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 
 class LoginUserFailTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_user_not_found()
     {
         $response = $this->postJson('/api/login', [

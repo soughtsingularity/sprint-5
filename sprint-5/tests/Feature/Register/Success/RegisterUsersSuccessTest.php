@@ -2,29 +2,11 @@
 
 namespace Tests\Feature\Register\Success;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Database\Seeders\RolesAndPermissionsSeeder;
-use Laravel\Passport\ClientRepository;
+use Tests\ApiTestCase;
 
-class RegisterUsersSuccessTest extends TestCase
+class RegisterUsersSuccessTest extends ApiTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->seed(RolesAndPermissionsSeeder::class);
-        $clientRepository = new ClientRepository();
-        $client = $clientRepository->createPersonalAccessClient(
-            null, 'Test Personal Access Client', 'http://localhost');
-            config(['passport.personal_access_client.id' => $client->id]);
-            config(['passport.personal_access_client.secret' => $client->secret]);        
-
-        
-    }
     public function test_user_can_register()
     {
 

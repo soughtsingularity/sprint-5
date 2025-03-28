@@ -2,11 +2,8 @@
 
 namespace Tests\Feature\Course\Validation;
 
-use Tests\TestCase;
 use App\Models\User;
 use Laravel\Passport\Passport;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\ApiTestCase;
 
@@ -16,7 +13,7 @@ class CreateCourseValidationTest extends ApiTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::where('email', 'admin@gmail.com')->first();
+        $admin = User::where('email', 'admin@test.com')->first();
         Passport::actingAs($admin);
     }
     

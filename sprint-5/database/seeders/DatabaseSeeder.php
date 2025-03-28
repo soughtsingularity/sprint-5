@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(RolesAndPermissionsSeeder::class);
+        $this->call(PassportSeeder::class);
 
         $user = User::factory()->create([
             'username' => 'test_user',
@@ -30,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
         $admin = User::factory()->create([
             'username' => 'test_admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@test.com',
             'password' => bcrypt('password123!'),
             'role' => 'admin',
         ]);

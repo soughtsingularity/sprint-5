@@ -2,11 +2,7 @@
 
 namespace Tests\Feature\Course\Success;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
-use Laravel\Passport\Passport;
 use Tests\ApiTestCase;
 
 class CreateCourseTest extends ApiTestCase
@@ -17,8 +13,7 @@ class CreateCourseTest extends ApiTestCase
 
         $this->withoutExceptionHandling();
 
-        $admin = User::where('email', 'admin@gmail.com')->first();
-        Passport::actingAs($admin);
+        $admin = User::where('email', 'admin@test.com')->first();
         $admin->assignRole('admin');
         $admin->hasPermissionTo('create-course');
         
