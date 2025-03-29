@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Course\Validation;
+namespace Tests\Unit;
 
 use App\Models\User;
 use Laravel\Passport\Passport;

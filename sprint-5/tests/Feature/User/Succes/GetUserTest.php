@@ -13,6 +13,8 @@ class GetUserTest extends ApiTestCase
 
     public function test_user_can_get_own_info()
     {
+        $this->withoutExceptionHandling();
+        
         $user = User::factory()->create();
         $courses = Course::factory()->count(2)->create();
 

@@ -23,6 +23,10 @@ Route::middleware('auth:api')->group(function () {
             ->post('/courses/{course}/unenroll', [UserCourseController::class, 'unenroll']);
     });
 
+    Route::middleware('role:admin|user')->group(function () {
+        Route::middleware('permission:view-user')
+        ->get('/users/{user}', [UserController::class, 'show']);    });
+
     Route::middleware('role:admin')->group(function () {
         Route::middleware('permission:create-course')
             ->post('/courses', [CourseController::class, 'store']);
