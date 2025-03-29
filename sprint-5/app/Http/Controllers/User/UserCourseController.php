@@ -30,7 +30,11 @@ class UserCourseController extends Controller
     {
         $user = auth()->user();
 
-        
+        if(!$course->users()->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'message' => 'You have not enrolled in the course',
+            ], 409);
+        }
 
         $user->courses()->detach($course->id);
 

@@ -43,4 +43,23 @@ class UnenrollCourseFailTest extends ApiTestCase
                 'message' => 'Unauthenticated.',
         ]);
     }
+
+    public function test_unenroll_course_if_user_is_not_in_the_course()
+    {
+        //$this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $course = Course::factory()->create();
+        $user->assignRole('user');
+        $token = $user->createToken('authToken')->accessToken;
+        
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson("/api/courses/{$course->id}/unenroll");
+
+        $response->assertStatus(409)
+            ->assertJson([
+                'message' => 'You have not enrolled in the course',
+            ]);
+    }
 }
