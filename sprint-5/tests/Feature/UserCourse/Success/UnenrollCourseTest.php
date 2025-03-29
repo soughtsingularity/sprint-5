@@ -19,7 +19,7 @@ class UnenrollCourseTest extends ApiTestCase
         $user = User::factory()->create();
         $course = Course::factory()->create();
         $user->assignRole('user');
-        $user->hasPermissionTo('unenroll-course');
+
         $user->courses()->attach($course->id);
 
         $token = $user->createToken('authToken')->accessToken;

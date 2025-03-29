@@ -23,7 +23,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $unenrollCoursePermission = Permission::firstOrCreate(['name' => 'unenroll-course', 'guard_name' => 'api']);
 
 
-        $userRole->givePermissionTo($deleteAccountPermission, $enrollCoursePermission);
+        $userRole->givePermissionTo($deleteAccountPermission, $enrollCoursePermission, $unenrollCoursePermission);
 
         $adminRole->givePermissionTo($createCoursePermission);
     }
