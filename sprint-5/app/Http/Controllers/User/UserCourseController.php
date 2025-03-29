@@ -25,4 +25,21 @@ class UserCourseController extends Controller
             'message' => 'You have successfully enrolled in the course',
         ], 200);
     }
+
+    public function unenroll(Course $course)
+    {
+        $user = auth()->user();
+
+        if(!$course->users()->where('user_id', $user->id)->exists()) {
+            return response()->json([
+                'message' => 'You have not enrolled in the course',
+            ], 409);
+        }
+
+        $user->courses()->detach($course->id);
+
+        return response()->json([
+            'message' => 'You have successfully unenrolled from the course',
+        ], 200);
+    }
 }

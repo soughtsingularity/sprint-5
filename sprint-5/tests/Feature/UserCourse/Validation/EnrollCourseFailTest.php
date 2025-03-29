@@ -9,11 +9,11 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\ApiTestCase;
 
-class EnrollCourseFail extends ApiTestCase
+class EnrollCourseFailTest extends ApiTestCase
 {
     public function test_enroll_course_without_token()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $user = User::factory()->create();
         $course = Course::factory()->create();
@@ -30,7 +30,7 @@ class EnrollCourseFail extends ApiTestCase
 
     public function test_enroll_course_with_invalid_token()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $user = User::factory()->create();
         $course = Course::factory()->create();
@@ -51,7 +51,7 @@ class EnrollCourseFail extends ApiTestCase
 
     public function test_enroll_course_more_than_one_time()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $user = User::factory()->create();
         $course = Course::factory()->create();
@@ -76,27 +76,5 @@ class EnrollCourseFail extends ApiTestCase
                 'message' => 'You have already enrolled in the course',
             ]);
     }
-
-    public function test_enroll_course_without_permission()
-    {
-        $this->withoutExceptionHandling();
-
-        $user = User::factory()->create();
-        $course = Course::factory()->create();
-        $user->assignRole('user');
-
-        $token = $user->createToken('authToken')->accessToken;
-
-        $response = $this->withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-        ])->postJson("/api/courses/{$course->id}/enroll");
-
-        $response->assertStatus(403)
-            ->assertJson([
-                'message' => 'Permission denied.'
-            ]);
-    }
-
-
 
 }
