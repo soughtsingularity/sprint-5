@@ -18,6 +18,9 @@ Route::middleware('auth:api')->group(function () {
 
         Route::middleware('permission:enroll-course')
             ->post('/courses/{course}/enroll', [UserCourseController::class, 'enroll']);
+
+        Route::middleware('permission:unenroll-course')
+            ->post('/courses/{course}/unenroll', [UserCourseController::class, 'unenroll']);
     });
 
     Route::middleware('role:admin')->group(function () {
