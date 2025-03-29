@@ -30,6 +30,8 @@ class UserCourseController extends Controller
     {
         $user = auth()->user();
 
+        
+
         $user->courses()->detach($course->id);
 
         return response()->json([
