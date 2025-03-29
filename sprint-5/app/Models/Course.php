@@ -12,11 +12,11 @@ class Course extends Model
     protected $fillable = [
         'title',
         'description',
-        'videos'
+        'content'
     ];
 
     protected $casts = [
-        'videos' => 'array'
+        'content' => 'array'
     ];
 
     public function users()

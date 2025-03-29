@@ -13,7 +13,7 @@ class CreateCourseFailTest extends ApiTestCase
         $courseData = [
             'title' => 'Course Without Token',
             'description' => 'Course Without Token Description',
-            'videos' => [[
+            'content' => [[
                     'title' => 'Video 1',
                     'description' => 'Video 1 Description',
                 ]] 

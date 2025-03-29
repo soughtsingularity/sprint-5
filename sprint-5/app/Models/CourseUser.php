@@ -27,5 +27,7 @@ class CourseUser extends Pivot
             $this->progress >= 70 => 'silver',
             $this->progress >= 50 => 'bronze',
             default => null,
+        };
     }
+
 }
