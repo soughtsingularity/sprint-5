@@ -17,20 +17,27 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->title(),
+            'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
-            'videos' => [
+            'content' => [
                 [
-                    'title' => fake()->title(),
+                    'title' => fake()->sentence(3),
                     'description' => fake()->paragraph(),
-                    'url' => 'https://www.youtube.com/embed/video1'
-                ],
-                [
-                    'title' => fake()->title(),
-                    'description' => fake()->paragraph(),
-                    'url' => 'https://www.youtube.com/embed/video2'
+                    'videos' => [
+                        [
+                            'title' => fake()->sentence(3),
+                            'description' => fake()->paragraph(),
+                            'url' => 'https://www.youtube.com/embed/video1'
+                        ],
+                        [
+                            'title' => fake()->sentence(3),
+                            'description' => fake()->paragraph(),
+                            'url' => 'https://www.youtube.com/embed/video2'
+                        ]
+                    ]
                 ]
             ]
         ];
     }
+    
 }

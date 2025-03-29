@@ -2,12 +2,8 @@
 
 namespace Tests\Feature\Course\Validation;
 
-use Tests\TestCase;
 use App\Models\User;
 use Laravel\Passport\Passport;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 use Tests\ApiTestCase;
 
 class CreateCourseFailTest extends ApiTestCase
@@ -17,7 +13,7 @@ class CreateCourseFailTest extends ApiTestCase
         $courseData = [
             'title' => 'Course Without Token',
             'description' => 'Course Without Token Description',
-            'videos' => [[
+            'content' => [[
                     'title' => 'Video 1',
                     'description' => 'Video 1 Description',
                 ]] 

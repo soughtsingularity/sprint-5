@@ -2,15 +2,13 @@
 
 namespace Tests\Feature\Register\Success;
 
-use Tests\TestCase;
 use App\Models\User;
 use Tests\ApiTestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Constraints\HasInDatabase;
 
 class LoginUsersSucccessTest extends ApiTestCase
 {
+    use RefreshDatabase;
 
     public function test_user_can_login()
     {

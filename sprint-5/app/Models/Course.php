@@ -12,15 +12,18 @@ class Course extends Model
     protected $fillable = [
         'title',
         'description',
-        'videos'
+        'content'
     ];
 
     protected $casts = [
-        'videos' => 'array'
+        'content' => 'array'
     ];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'course_user', 'course_id', 'user_id');
+        return $this->belongsToMany(User::class, 'course_user', 'course_id', 'user_id')
+                    ->using(CourseUser::class)
+                    ->withPivot('progress', 'medal')
+                    ->withTimestamps();
     }
 }

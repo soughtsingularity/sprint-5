@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Course\Success;
 
-use Tests\TestCase;
 use App\Models\Course;
 use Tests\ApiTestCase;
 use App\Models\User;

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('course_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedTinyInteger('progress')->default(0);
+            $table->enum('medal', ['gold', 'silver', 'bronze'])->nullable();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

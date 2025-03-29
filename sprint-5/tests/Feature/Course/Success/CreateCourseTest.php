@@ -2,11 +2,7 @@
 
 namespace Tests\Feature\Course\Success;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\User;
-use Laravel\Passport\Passport;
 use Tests\ApiTestCase;
 
 class CreateCourseTest extends ApiTestCase
@@ -17,28 +13,43 @@ class CreateCourseTest extends ApiTestCase
 
         $this->withoutExceptionHandling();
 
-        $admin = User::where('email', 'admin@gmail.com')->first();
-        Passport::actingAs($admin);
+        $admin = User::where('email', 'admin@test.com')->first();
         $admin->assignRole('admin');
         $admin->hasPermissionTo('create-course');
         
 
         $courseData = [
-            'title' => 'NewCoourse',
+            'title' => 'NewCourse',
             'description' => 'NewCourseDescription',
-            'videos' => [
+            'content' => [
                 [
-                    'title' => 'Video1',
-                    'description' => 'Video1Description',
-                    'url' => 'https://www.youtube.com/watch?v=video1'
+                    'title' => 'Capítulo 1',
+                    'description' => 'Intro',
+                    'videos' => [
+                        [
+                            'title' => 'Video1',
+                            'description' => 'Video1Description',
+                            'url' => 'https://www.youtube.com/watch?v=video1'
+                        ],
+                        [
+                            'title' => 'Video2',
+                            'description' => 'Video2Description',
+                            'url' => 'https://www.youtube.com/watch?v=video2'
+                        ]
+                    ]
                 ],
                 [
-                    'title' => 'Video2',
-                    'description' => 'Video2Description',
-                    'url' => 'https://www.youtube.com/watch?v=video2'
+                    'title' => 'Capítulo 2',
+                    'description' => 'Segundo capítulo',
+                    'videos' => [
+                        [
+                            'title' => 'Video3',
+                            'description' => 'Video3Description',
+                            'url' => 'https://www.youtube.com/watch?v=video3'
+                        ]
+                    ]
                 ]
             ]
-
         ];
 
         $token = $admin->createToken('authToken')->accessToken;
@@ -56,8 +67,16 @@ class CreateCourseTest extends ApiTestCase
                     'id',
                     'title',
                     'description',
-                    'videos' => [
-                        ['title', 'description', 'url']]
+                    'content' => [
+                        ['title', 
+                        'description', 
+                        'videos' => [
+                            ['title', 
+                            'description', 
+                            'url']
+                        ]
+                        ]
+                    ],
                 ]);
                     
                 $this->assertDatabaseHas('courses', [

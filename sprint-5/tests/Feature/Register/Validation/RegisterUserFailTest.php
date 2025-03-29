@@ -2,12 +2,7 @@
 
 namespace Tests\Feature\Feature\Register\Validation;
 
-use Tests\TestCase;
 use Tests\ApiTestCase;
-use Laravel\Passport\ClientRepository;
-use Illuminate\Foundation\Testing\WithFaker;
-use Database\Seeders\RolesAndPermissionsSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 
