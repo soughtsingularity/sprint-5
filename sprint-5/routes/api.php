@@ -24,7 +24,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::middleware('role:admin|user')->group(function () {
-        Route::middleware('permission:view-user')
+        Route::middleware('permission:view-user-info')
         ->get('/users/{user}', [UserController::class, 'show']);    });
 
     Route::middleware('role:admin')->group(function () {

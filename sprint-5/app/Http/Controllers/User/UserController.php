@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
+    public function show(User $user)
+    {
+        $user = auth()->user();
+    
+        $user->load('courses:id,title');
+    
+        return new UserResource($user);
+    }
+
     public function destroy(User $user)
     {
         $authenticatedUser = auth()->user();
