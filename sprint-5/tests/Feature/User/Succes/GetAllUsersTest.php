@@ -3,8 +3,9 @@
 namespace Tests\Feature\User\Succes;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Course;
 use Tests\ApiTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class GetAllUsersTest extends ApiTestCase
 {
@@ -14,10 +15,32 @@ class GetAllUsersTest extends ApiTestCase
     {
         $this->withoutExceptionHandling();
 
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user1 = User::factory()->create(['role' => 'user']);
-        $user2 = User::factory()->create(['role' => 'user']);
-        $user3 = User::factory()->create(['role' => 'user']);
+        $admin = User::factory()->create();
+        $user = User::factory()->create();
+
+        $admin->assignRole('admin');
+        $user->assignRole('user');
+
+
+        $course = Course::factory()->create([
+            'title' => 'Test Course',
+            'description' => 'This is a test course',
+            'content' => [
+                [
+                    'title' => 'Capítulo 1',
+                    'description' => 'Descripción del capítulo 1',
+                    'videos' => [
+                        [
+                            'title' => 'Test Video 1',
+                            'description' => 'This is a test video 1',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $user->courses()->attach($course);
+
 
         $token = $admin->createToken('authToken')->accessToken;
 
@@ -26,24 +49,24 @@ class GetAllUsersTest extends ApiTestCase
         ])->getJson('/api/users');
 
         $response->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    [
-                        'id' => $user1->id,
-                        'name' => $user1->name,
-                        'email' => $user1->email,
-                    ],
-                    [
-                        'id' => $user2->id,
-                        'name' => $user2->name,
-                        'email' => $user2->email,
-                    ],
-                    [
-                        'id' => $user3->id,
-                        'name' => $user3->name,
-                        'email' => $user3->email,
-                    ],
-                ],
-            ]);
+            ->assertJsonStructure([
+            'data' => [
+                '*' => [
+                    'id',
+                    'name',
+                    'email',
+                    'courses' => [
+                        '*' => [
+                            'id',
+                            'title',
+                            'description',
+                            'progress',
+                            'medal',
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+    
     }
 }

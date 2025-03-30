@@ -69,6 +69,29 @@ class DatabaseSeeder extends Seeder
                 ]
             ]
         ]);
+
+        $course2 = Course::factory()->create([
+            'title' => 'Test Course 2',
+            'description' => 'This is a test course 2',
+            'content' => [
+                [
+                    'title' => 'Capítulo 1',
+                    'description' => 'Descripción del capítulo 1',
+                    'videos' => [
+                        [
+                            'title' => 'Test Video 1',
+                            'description' => 'This is a test video 1',
+                            'url' => 'https://www.youtube.com/watch?v=123456',
+                        ],
+                        [
+                            'title' => 'Test Video 2',
+                            'description' => 'This is a test video 2',
+                            'url' => 'https://www.youtube.com/watch?v=654321',
+                        ],
+                    ]
+                ]
+            ]
+        ]);
         
     }
 }
