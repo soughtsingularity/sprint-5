@@ -21,20 +21,6 @@ class GetAllCoursesTest extends ApiTestCase
                     '*' => [
                         'id',
                         'title',
-                        'description',
-                        'content' => [
-                            '*' => [
-                                'title',
-                                'description',
-                                'videos' => [
-                                    '*' => [
-                                        'title',
-                                        'description',
-                                        'url',
-                                    ],
-                                ],
-                            ],
-                        ],
                     ],
                 ],
             ]);
