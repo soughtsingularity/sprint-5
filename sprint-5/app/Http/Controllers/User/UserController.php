@@ -10,10 +10,12 @@ use App\Http\Resources\UserResource;
 class UserController extends Controller
 {
     public function show(User $user)
-    {
-        $user = auth()->user();
-    
+    {    
         $user->load('courses:id,title');
+
+        if($user->id !== auth()->user()->id && !auth()->user()->hasRole('admin')) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
     
         return new UserResource($user);
     }

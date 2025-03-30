@@ -14,7 +14,7 @@ class GetUserTest extends ApiTestCase
     public function test_user_can_get_own_info()
     {
         $this->withoutExceptionHandling();
-        
+
         $user = User::factory()->create();
         $courses = Course::factory()->count(2)->create();
 
@@ -23,6 +23,43 @@ class GetUserTest extends ApiTestCase
         $user->assignRole('user');
         
         $token = $user->createToken('authToken')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson("/api/users/{$user->id}");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'courses' => [
+                        [
+                            'id' => $courses[0]->id,
+                            'title' => $courses[0]->title,
+                            'progress' => 95,
+                            'medal' => 'gold',
+                        ],
+                    ],
+                ],
+            ]);
+    }
+
+    public function test_admin_can_get_other_user_info()
+    {
+        $this->withoutExceptionHandling();
+        
+        $user = User::factory()->create();
+        $admin = User::factory()->create();
+        $courses = Course::factory()->count(2)->create();
+
+        $user->courses()->attach($courses[0], ['progress' => 95, 'medal' => 'gold']);
+
+        $user->assignRole('user');
+        $admin->assignRole('admin');
+        
+        $token = $admin->createToken('authToken')->accessToken;
 
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
