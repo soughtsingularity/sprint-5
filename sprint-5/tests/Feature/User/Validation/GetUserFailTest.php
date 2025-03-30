@@ -48,5 +48,21 @@ class GetUserFailTest extends ApiTestCase
     
         $response->assertStatus(404);
     }
+
+    public function test_user_cannot_get_user_info_without_token()
+    {
+        //$this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $user->assignRole('user');
+
+        $response = $this->getJson("/api/users/{$user->id}");
+
+        $response->assertStatus(401)
+            ->assertJson([
+                'message' => 'Unauthenticated.',
+            ]);
+    }
+
     
 }
