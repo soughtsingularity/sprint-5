@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserCourseController;
 use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\CourseList\CourseListController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
@@ -35,4 +36,4 @@ Route::middleware('auth:api')->group(function () {
     });
 });
 
-Route::get('/courses', [CourseController::class, 'index']);
+Route::get('/courses', [CourseListController::class, 'index']);
