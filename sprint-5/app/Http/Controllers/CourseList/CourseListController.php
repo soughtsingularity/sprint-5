@@ -21,6 +21,4 @@ class CourseListController extends Controller
         $course = Course::findOrFail($id);
         return new FullCourseResource($course);
     }
-
-
 }

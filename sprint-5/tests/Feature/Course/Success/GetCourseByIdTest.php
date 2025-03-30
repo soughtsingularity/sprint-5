@@ -44,5 +44,17 @@ class GetCourseByIdTest extends ApiTestCase
                 ],
             ]);
     }
+
+    public function test_course_not_found()
+    {
+        //$this->withoutExceptionHandling();
+    
+        $course = Course::factory()->create();
+        
+        $response = $this->getJson('/api/courses/' . $course->id + 1);
+    
+        $response->assertStatus(404);
+    }
+    
 }
 
