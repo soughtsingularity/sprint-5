@@ -36,4 +36,21 @@ class GetAllUsersFailTest extends ApiTestCase
         
         $response->assertStatus(401);
     }
+
+    public function test_admin_cannot_get_all_users_with_invalid_token()
+    {
+        //$this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+        $token = 'invalid_token';
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/users');
+        
+        $response->assertStatus(401);
+    }
+
+
 }
