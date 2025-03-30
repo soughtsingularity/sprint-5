@@ -82,5 +82,35 @@ class GetUserFailTest extends ApiTestCase
             ]);
     }
 
+    public function test_user_cannot_get_user_info_without_role_user()
+    {
+        //$this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+
+        $token = $user->createToken('authToken')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson("/api/users/{$user->id}");
+
+        $response->assertStatus(403);
+    }
+
+    public function test_user_cannot_get_user_info_without_role_admin()
+    {
+        //$this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+
+        $token = $user->createToken('authToken')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson("/api/users/{$user->id}");
+
+        $response->assertStatus(403);
+    }
+
     
 }
