@@ -33,6 +33,6 @@ Route::middleware('auth:api')->group(function () {
         Route::middleware('permission:get-all-users')
             ->get('/users', [UserController::class, 'index']);
     });
-
 });
 
+Route::get('/courses', [CourseController::class, 'index']);
