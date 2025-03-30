@@ -21,10 +21,11 @@ class RolesAndPermissionsSeeder extends Seeder
         $createCoursePermission = Permission::firstOrCreate(['name' => 'create-course', 'guard_name' => 'api']);
         $enrollCoursePermission = Permission::firstOrCreate(['name' => 'enroll-course', 'guard_name' => 'api']);
         $unenrollCoursePermission = Permission::firstOrCreate(['name' => 'unenroll-course', 'guard_name' => 'api']);
+        $viewUserInfoPermission = Permission::firstOrCreate(['name' => 'view-user-info', 'guard_name' => 'api']);
 
 
-        $userRole->givePermissionTo($deleteAccountPermission, $enrollCoursePermission, $unenrollCoursePermission);
+        $userRole->givePermissionTo($deleteAccountPermission, $enrollCoursePermission, $unenrollCoursePermission, $viewUserInfoPermission);
 
-        $adminRole->givePermissionTo($createCoursePermission);
+        $adminRole->givePermissionTo($createCoursePermission, $viewUserInfoPermission);
     }
 }
