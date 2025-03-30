@@ -39,4 +39,16 @@ class GetAllCoursesTest extends ApiTestCase
                 ],
             ]);
     }
+
+    public function test_courses_list_is_empty_when_no_courses_exist()
+    {
+    
+        $response = $this->getJson('/api/courses');
+    
+        $response->assertStatus(200)
+                 ->assertJson([
+                     'data' => [],
+                 ]);
+    }
+    
 }
