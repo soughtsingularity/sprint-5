@@ -31,4 +31,22 @@ class GetUserFailTest extends ApiTestCase
                 'message' => 'Forbidden',
             ]);
     }
+
+    public function test_user_cannot_get_unexistent_user_info()
+    {
+        $this->withExceptionHandling();
+    
+        $user = User::factory()->create();
+        $user->assignRole('user');
+        $token = $user->createToken('authToken')->accessToken;
+    
+        $nonExistentId = $user->id + 999;
+    
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->getJson('/api/users/' . $nonExistentId);
+    
+        $response->assertStatus(404);
+    }
+    
 }
