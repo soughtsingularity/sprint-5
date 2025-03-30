@@ -12,7 +12,7 @@ class GetAllUsersFailTest extends ApiTestCase
 
     public function test_user_cannote_get_all_users()
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $user = User::factory()->create();
         $user->assignRole('user');
@@ -23,5 +23,17 @@ class GetAllUsersFailTest extends ApiTestCase
         ])->getJson('/api/users');
         
         $response->assertStatus(403);
+    }
+
+    public function test_admin_cannot_get_all_users_without_token()
+    {
+        //$this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $response = $this->getJson('/api/users');
+        
+        $response->assertStatus(401);
     }
 }
