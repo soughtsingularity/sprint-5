@@ -30,6 +30,8 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::middleware('permission:create-course')
             ->post('/courses', [CourseController::class, 'store']);
+        Route::middleware('permission:get-all-users')
+            ->get('/users', [UserController::class, 'index']);
     });
 
 });

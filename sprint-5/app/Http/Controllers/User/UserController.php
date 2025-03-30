@@ -10,6 +10,19 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        $user = auth()->user();
+    
+        if ($user->hasRole('admin')) {
+            $users = User::with('courses')->get();            
+            return UserResource::collection($users);
+            
+        } else {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+    }
+
     public function show(User $user)
     {
         try {
