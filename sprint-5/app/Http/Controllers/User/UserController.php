@@ -10,6 +10,58 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
 {
+    /**
+ * @OA\Get(
+ *     path="/api/users",
+ *     summary="Get all users and their courses",
+ *     tags={"Admin"},
+ *     security={{"passport": {}}},
+ *     @OA\Response(
+ *         response=200,
+ *         description="List of all users with their enrolled courses",
+ *         @OA\JsonContent(
+ *             type="object",
+ *             @OA\Property(
+ *                 property="data",
+ *                 type="array",
+ *                 @OA\Items(
+ *                     type="object",
+ *                     @OA\Property(property="id", type="integer", example=1),
+ *                     @OA\Property(property="username", type="string", example="test_user"),
+ *                     @OA\Property(property="email", type="string", example="user@test.com"),
+ *                     @OA\Property(
+ *                         property="courses",
+ *                         type="array",
+ *                         @OA\Items(
+ *                             type="object",
+ *                             @OA\Property(property="id", type="integer", example=1),
+ *                             @OA\Property(property="title", type="string", example="Test Course"),
+ *                             @OA\Property(property="description", type="string", example="Course description"),
+ *                             @OA\Property(property="progress", type="integer", example=75),
+ *                             @OA\Property(property="medal", type="string", example="silver")
+ *                         )
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthorized - missing or invalid token",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=403,
+ *         description="Forbidden - user does not have the required role or permission",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Forbidden")
+ *         )
+ *     )
+ * )
+ */
+
     public function index()
     {
         $user = auth()->user();
@@ -22,6 +74,62 @@ class UserController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
     }
+
+    /**
+ * @OA\Get(
+ *     path="/api/users/{user}",
+ *     summary="Get information about a user",
+ *     tags={"Admin & User - User Info"},
+ *     security={{"passport": {}}},
+ *     @OA\Parameter(
+ *         name="user",
+ *         in="path",
+ *         required=true,
+ *         description="User ID to retrieve information",
+ *         @OA\Schema(type="integer", example=1)
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="User data retrieved successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="data", type="object",
+ *                 @OA\Property(property="id", type="integer", example=1),
+ *                 @OA\Property(property="name", type="string", example="test_user"),
+ *                 @OA\Property(property="email", type="string", example="test@test.com"),
+ *                 @OA\Property(property="courses", type="array",
+ *                     @OA\Items(
+ *                         @OA\Property(property="id", type="integer", example=1),
+ *                         @OA\Property(property="title", type="string", example="Curso A"),
+ *                         @OA\Property(property="progress", type="integer", example=95),
+ *                         @OA\Property(property="medal", type="string", example="gold")
+ *                     )
+ *                 )
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthorized – Missing or invalid token",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=403,
+ *         description="Forbidden – Not allowed to access this user data",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Forbidden")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="User not found",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="User not found")
+ *         )
+ *     )
+ * )
+ */
 
     public function show(User $user)
     {
@@ -37,6 +145,49 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
     }
+
+    /**
+ * @OA\Delete(
+ *     path="/api/users/{user}",
+ *     summary="Delete a user account",
+ *     description="Allows a user to delete their own account. Only accessible with role:user and permission:delete-account.",
+ *     tags={"User"},
+ *     security={{"passport":{}}},
+ *     @OA\Parameter(
+ *         name="user",
+ *         in="path",
+ *         required=true,
+ *         description="User ID",
+ *         @OA\Schema(type="integer", example=5)
+ *     ),
+ *     @OA\Response(
+ *         response=204,
+ *         description="Account deleted successfully (no content)"
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Unauthorized - Token missing or invalid",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=403,
+ *         description="Forbidden - Cannot delete other user or missing role",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Forbidden")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="User not found",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\User] 999")
+ *         )
+ *     )
+ * )
+ */
+
     
 
     public function destroy(User $user)

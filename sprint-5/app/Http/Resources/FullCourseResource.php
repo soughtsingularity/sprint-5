@@ -13,7 +13,7 @@ class FullCourseResource extends JsonResource
             'id'          => $this->id,
             'title'       => $this->title,
             'description' => $this->description,
-            'content' => json_decode($this->content, true),
+            'content' => $this->content,
         ];
     }
 }
