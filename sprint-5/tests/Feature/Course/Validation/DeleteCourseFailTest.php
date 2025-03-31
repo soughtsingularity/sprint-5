@@ -60,5 +60,21 @@ class DeleteCourseFailTest extends ApiTestCase
     
         $response->assertStatus(404);
     }
+
+    public function test_user_cannot_delete_course()
+    {
+        //$this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $user->assignRole('user');
+        $course = Course::factory()->create();
+        $token = $user->createToken('user-token')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/courses/' . $course->id);
+
+        $response->assertStatus(403);
+    }
     
 }
