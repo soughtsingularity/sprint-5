@@ -92,6 +92,16 @@ class DatabaseSeeder extends Seeder
                 ]
             ]
         ]);
+
+        $user->courses()->attach($course->id, [
+            'progress' => 60,
+            'medal' => 'silver',
+        ]);
+        
+        $user2->courses()->attach($course2->id, [
+            'progress' => 95,
+            'medal' => 'gold',
+        ]);
         
     }
 }
