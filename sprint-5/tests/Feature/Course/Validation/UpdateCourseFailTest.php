@@ -66,4 +66,55 @@ class UpdateCourseFailTest extends ApiTestCase
 
     }
 
+    public function test_admin_cannot_update_course_without_token()
+    {
+        //$this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $oldCourseData = [
+            'title' => 'OldCourse',
+            'description' => 'OldCourseDescription',
+            'content' => [
+                [
+                    'title' => 'oldChapter',
+                    'description' => 'oldDescription',
+                    'videos' => [
+                        [
+                            'title' => 'oldVideo',
+                            'description' => 'oldVideo1Description',
+                            'url' => 'https://www.youtube.com/watch?v=video1'
+                        ],
+                    ]
+                ],
+            ]
+        ];
+
+        $course = $admin->courses()->create($oldCourseData);
+
+        $updatedCourseData = [
+            'title' => 'UpdatedCourse',
+            'description' => 'UpdatedCourseDescription',
+            'content' => [
+                [
+                    'title' => 'UpdatedChapter',
+                    'description' => 'UpdatedDescription',
+                    'videos' => [
+                        [
+                            'title' => 'UpdatedVideo',
+                            'description' => 'UpdatedVideo1Description',
+                            'url' => 'https://www.youtube.com/watch?v=video1'
+                        ],
+                    ]
+                ],
+            ]
+        ];
+        $response = $this->json('PUT', '/api/courses/' . $course->id, $updatedCourseData);
+        $response->assertStatus(401)
+            ->assertJson([
+                'message' => 'Unauthenticated.',
+            ]);
+    }
+
 }
