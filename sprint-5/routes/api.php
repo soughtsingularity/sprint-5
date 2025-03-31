@@ -35,6 +35,8 @@ Route::middleware('auth:api')->group(function () {
             ->get('/users', [UserController::class, 'index']);
         Route::middleware('permission:delete-course')
             ->delete('/courses/{course}', [CourseController::class, 'destroy']);
+        Route::middleware('permission:update-course')
+            ->put('/courses/{course}', [CourseController::class, 'update']);
     });
 });
 
