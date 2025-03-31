@@ -14,4 +14,10 @@ class CourseController extends Controller
         $course = Course::create($request->validated());
         return response()->json($course, 201);
     }
+
+    public function destroy(Course $course)
+    {
+        $course->delete();
+        return response()->json(['message' => 'Course deleted successfully'], 200);
+    }
 }
