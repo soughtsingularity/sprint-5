@@ -63,10 +63,13 @@ class UpdateCourseTest extends ApiTestCase
         ])->putJson('/api/courses/' . $course->id, $updatedCourseData);
 
         $response->assertStatus(200)
-            ->assertJsonFragment([
-                'title' => $updatedCourseData['title'],
-                'description' => $updatedCourseData['description'],
-            ]);
+        ->assertJson([
+            'id' => $course->id,
+            'title' => $updatedCourseData['title'],
+            'description' => $updatedCourseData['description'],
+            'content' => $updatedCourseData['content'],
+        ]);
+
 
 
     }
