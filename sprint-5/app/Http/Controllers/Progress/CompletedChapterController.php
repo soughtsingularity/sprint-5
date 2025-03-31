@@ -21,6 +21,12 @@ class CompletedChapterController extends Controller
         $user = auth()->user();
         $course = Course::findOrFail($courseId);
         $chapters = json_decode($course->content, true);
+
+        if(!$user->courses()->where('course_id', $courseId)->exists()) {
+            return response()->json([
+                'message' => 'You are not enrolled in this course.',
+            ], 403);
+        }
     
         $totalChapters = count($chapters);
         $progress = round((($chapterIndex + 1) / $totalChapters) * 100);
