@@ -7,6 +7,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserCourseController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\CourseList\CourseListController;
+use App\Http\Controllers\Progress\CompletedChapterController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('login', [LoginController::class, 'login']);
@@ -22,11 +23,15 @@ Route::middleware('auth:api')->group(function () {
 
         Route::middleware('permission:unenroll-course')
             ->post('/courses/{course}/unenroll', [UserCourseController::class, 'unenroll']);
+
+        Route::middleware('permission:obtain-progress')
+            ->post('/courses/{courseId}/chapters/{chapterIndex}/complete', CompletedChapterController::class);
     });
 
     Route::middleware('role:admin|user')->group(function () {
         Route::middleware('permission:view-user-info')
-        ->get('/users/{user}', [UserController::class, 'show']);    });
+            ->get('/users/{user}', [UserController::class, 'show']);
+    });
 
     Route::middleware('role:admin')->group(function () {
         Route::middleware('permission:create-course')
@@ -39,6 +44,7 @@ Route::middleware('auth:api')->group(function () {
             ->put('/courses/{course}', [CourseController::class, 'update']);
     });
 });
+
 
 Route::get('/courses', [CourseListController::class, 'index']);
 Route::get('/courses/{course}', [CourseListController::class, 'show']);
