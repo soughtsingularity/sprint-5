@@ -30,6 +30,14 @@ class CompletedChapterController extends Controller
             ], 403);
         }
 
+        $currentProgress = $user->courses()->where('course_id', $courseId)->first()->pivot->progress ?? 0;
+        $expectedProgress = round((($chapterIndex + 1) / count($chapters)) * 100);
+
+        if ($currentProgress >= $expectedProgress) {
+            return response()->json(['message' => 'Chapter already completed'], 400);
+        }
+
+
     
         $totalChapters = count($chapters);
         $progress = round((($chapterIndex + 1) / $totalChapters) * 100);
