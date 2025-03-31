@@ -9,18 +9,20 @@ class CompletedChapterController extends Controller
 {
     public function __invoke(Request $request, $courseId, $chapterIndex)
     {
-        // Validate the request
-        $request->validate([
-            'courseId' => 'required|integer|exists:courses,id',
-            'chapterIndex' => 'required|integer|min:0',
-        ]);
-
-        // Logic to mark the chapter as completed
-        // ...
-
+        $validated = validator(
+            ['courseId' => $courseId, 'chapterIndex' => $chapterIndex],
+            [
+                'courseId' => 'required|integer|exists:courses,id',
+                'chapterIndex' => 'required|integer|min:0',
+            ]
+        )->validate();
+    
+        // Aquí va la lógica de marcar capítulo como completado
+    
         return response()->json([
             'message' => 'Chapter completed successfully.',
         ]);
     }
+    
 
 }
