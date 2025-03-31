@@ -165,11 +165,65 @@ class UpdateCourseFailTest extends ApiTestCase
         $response = $this->withHeaders([
             'Authorization' => 'Bearer ' . $token,
         ])->json('PUT', '/api/courses/' . $course->id, $updatedCourseData);
-        
+
         $response->assertStatus(401)
             ->assertJson([
                 'message' => 'Unauthenticated.',
             ]);
+    }
+
+    public function test_admin_cannot_update_inexistent_course()
+    {
+        //$this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $admin->assignRole('admin');
+
+        $oldCourseData = [
+            'title' => 'OldCourse',
+            'description' => 'OldCourseDescription',
+            'content' => [
+                [
+                    'title' => 'oldChapter',
+                    'description' => 'oldDescription',
+                    'videos' => [
+                        [
+                            'title' => 'oldVideo',
+                            'description' => 'oldVideo1Description',
+                            'url' => 'https://www.youtube.com/watch?v=video1'
+                        ],
+                    ]
+                ],
+            ]
+        ];
+
+        $course = $admin->courses()->create($oldCourseData);
+
+        $updatedCourseData = [
+            'title' => 'UpdatedCourse',
+            'description' => 'UpdatedCourseDescription',
+            'content' => [
+                [
+                    'title' => 'UpdatedChapter',
+                    'description' => 'UpdatedDescription',
+                    'videos' => [
+                        [
+                            'title' => 'UpdatedVideo',
+                            'description' => 'UpdatedVideo1Description',
+                            'url' => 'https://www.youtube.com/watch?v=video1'
+                        ],
+                    ]
+                ],
+            ]
+        ];
+
+        $token = $admin->createToken('authToken')->accessToken;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('PUT', '/api/courses/' . $course->id + 1 ,$updatedCourseData);
+
+        $response->assertStatus(404);
     }
 
 }
