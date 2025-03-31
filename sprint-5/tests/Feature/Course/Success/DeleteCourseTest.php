@@ -16,6 +16,7 @@ class DeleteCourseTest extends ApiTestCase
         $this->withoutExceptionHandling();
 
         $admin = User::factory()->create();
+        $admin->assignRole('admin');
         $course = Course::factory()->create();
 
         $token = $admin->createToken('admin-token')->accessToken;
@@ -25,7 +26,7 @@ class DeleteCourseTest extends ApiTestCase
         ])->deleteJson('/api/courses/' . $course->id);
 
         $response->assertStatus(200);
-        
+
         $response->assertJson([
             'message' => 'Course deleted successfully',
         ]);
