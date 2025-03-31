@@ -17,7 +17,7 @@ class GetCourseByIdTest extends ApiTestCase
         $course = Course::factory()->create([
             'title' => 'Test Course',
             'description' => 'This is a test course',
-            'content' => [
+            'content' => json_encode([
                 [
                     'title' => 'Capítulo 1',
                     'description' => 'Intro',
@@ -29,20 +29,21 @@ class GetCourseByIdTest extends ApiTestCase
                         ]
                     ]
                 ]
-            ],
+            ]),
         ]);
 
         $response = $this->getJson('/api/courses/' . $course->id);
 
         $response->assertStatus(200)
-            ->assertJson([
-                'data' => [
-                    'id' => $course->id,
-                    'title' => 'Test Course',
-                    'description' => 'This is a test course',
-                    'content' => $course->content,
-                ],
-            ]);
+        ->assertJson([
+            'data' => [
+                'id' => $course->id,
+                'title' => 'Test Course',
+                'description' => 'This is a test course',
+                'content' => json_decode($course->content, true),
+            ],
+        ]);
+    
     }
 
     public function test_course_not_found()
