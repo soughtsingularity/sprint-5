@@ -45,7 +45,20 @@ class DeleteCourseFailTest extends ApiTestCase
         $response->assertJson([
             'message' => 'Unauthenticated.',
         ]);
-
-
     }
+
+    public function test_admin_cannot_delete_inexistent_course()
+    {
+        $admin = User::factory()->create();
+        $course = Course::factory()->create();
+        $admin->assignRole('admin');
+        $token = $admin->createToken('admin-token')->accessToken;
+        
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->deleteJson('/api/courses/' . $course->id + 1);
+    
+        $response->assertStatus(404);
+    }
+    
 }
