@@ -7,7 +7,7 @@ use Tests\ApiTestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Course;
 
-class CompleteChapterTest extends ApiTestCase
+class CompletedChapterTest extends ApiTestCase
 {
     use RefreshDatabase;
 
