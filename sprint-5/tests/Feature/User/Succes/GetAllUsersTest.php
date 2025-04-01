@@ -53,7 +53,7 @@ class GetAllUsersTest extends ApiTestCase
             'data' => [
                 '*' => [
                     'id',
-                    'name',
+                    'username',
                     'email',
                     'courses' => [
                         '*' => [

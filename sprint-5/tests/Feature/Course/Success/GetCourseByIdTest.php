@@ -14,10 +14,10 @@ class GetCourseByIdTest extends ApiTestCase
     {
         $this->withoutExceptionHandling();
         
-        $course = Course::factory()->create([
+        $course = Course::create([
             'title' => 'Test Course',
             'description' => 'This is a test course',
-            'content' => json_encode([
+            'content' => [
                 [
                     'title' => 'Capítulo 1',
                     'description' => 'Intro',
@@ -25,12 +25,13 @@ class GetCourseByIdTest extends ApiTestCase
                         [
                             'title' => 'Video 1',
                             'description' => 'Desc video 1',
-                            'url' => 'https://youtube.com/watch?v=abc123'
+                            'url' => 'https://youtube.com/watch?v=abc123',
                         ]
-                    ]
+                    ],
                 ]
-            ]),
+            ],
         ]);
+        
 
         $response = $this->getJson('/api/courses/' . $course->id);
 
@@ -40,9 +41,10 @@ class GetCourseByIdTest extends ApiTestCase
                 'id' => $course->id,
                 'title' => 'Test Course',
                 'description' => 'This is a test course',
-                'content' => json_decode($course->content, true),
+                'content' => $course->content,
             ],
         ]);
+    
     
     }
 

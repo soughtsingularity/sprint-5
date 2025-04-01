@@ -32,7 +32,7 @@ class GetUserTest extends ApiTestCase
             ->assertJson([
                 'data' => [
                     'id' => $user->id,
-                    'name' => $user->name,
+                    'username' => $user->username,
                     'email' => $user->email,
                     'courses' => [
                         [
@@ -69,7 +69,7 @@ class GetUserTest extends ApiTestCase
             ->assertJson([
                 'data' => [
                     'id' => $user->id,
-                    'name' => $user->name,
+                    'username' => $user->username,
                     'email' => $user->email,
                     'courses' => [
                         [
