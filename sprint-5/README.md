@@ -1,66 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Descripción
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+En aquesta pràctica aprendràs a crear una API REST completa amb control d'accés configurat mitjançant tokens.
 
-## About Laravel
+La idea aquí és que agafis el projecte que vas realitzar a l’Sprint 4 i el converteixis d’una arquitectura MVC a una API REST. Has de tenir en compte, però, que els endpoints els hauràs de dissenyar tu mateix/a i que serà condició indispensable obtenir-ne l’aprovació prèvia abans de desenvolupar el teu projecte.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A més, has de tenir en compte que el projecte ha de complir els següents requisits:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Com a mínim 2 recursos mantenibles.
+Gestió d’usuaris amb autenticació mitjançant la llibreria Passport.
+Almenys 2 rols diferenciats.
+Lògica de càlcul més complexa que un simple CRUD.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+✔️ Nivel 1
 
-## Learning Laravel
+Recorda que, abans de picar una sola línia de codi font productiu (els experiments que facis abans per entendre les diferents eines no compten), has d’entendre què has de fer. En aquest sentit, les preguntes clau per començar podrien ser:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Quina informació vull registrar?
+Què pot fer cada tipus d’usuari?
+Quins són els endpoints que faré servir perquè els usuaris hi accedeixin?
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Afegeix seguretat
 
-## Laravel Sponsors
+Inclou autenticació amb Passport en tots els accessos a les URL de l’API.
+Defineix un sistema de rols i restringeix l'accés a les diferents rutes segons el nivell de privilegis.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+Testing
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Crea els tests funcionals de l'aplicació. Et recomanem aplicar TDD per provar cadascuna de les rutes. Escriure els tests abans del codi t’ajudarà a aclarir què ha de fer la teva aplicació.
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+✔️ Nivel 2
 
-## Code of Conduct
+Crea la documentació de la teva API per a explicar als clients/es front-end com haurien de consumir l'API.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+✔️ Nivel 3
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Fes un deploy de la teva API. Pots fer-ho al servidor que vulguis o fent servir Laravel Forge.
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 🔑 Requisitos 
+
+- PHP 7.4+ 
+- Laravel Framework 11.43.1
+- Base de datos de preferencia
+- Composer (Para gestionar dependencias de PHP instaladas en el proyecto). 
+- Passport
+- Spatie
+- Swagger
+
+Dependecias instaladas: 
+- darkaonline/l5-swagger    9.0.1   OpenApi or Swagger integration to Laravel
+- fakerphp/faker            1.24.1  Faker is a PHP library that generates fake - - data for you.
+- laravel/framework         12.3.0  The Laravel Framework.
+- laravel/pail              1.2.2   Easily delve into your Laravel application'slog files directly from the command line.
+- laravel/passport          12.4.2  Laravel Passport provides OAuth2 server - - - support to Laravel.
+- laravel/pint              1.21.2  An opinionated code formatter for PHP.
+- laravel/sail              1.41.0  Docker files for running a basic Laravel - application.
+- laravel/tinker            2.10.1  Powerful REPL for the Laravel framework.
+- mockery/mockery           1.6.12  Mockery is a simple yet flexible PHP mock object framework
+- nunomaduro/collision      8.7.0   Cli error handling for console/command-line PHP applications.
+- phpunit/phpunit           11.5.13 The PHP Unit Testing framework.
+- spatie/laravel-permission 6.16.0  Permission handling for Laravel 8.0 and up
+
+☕ Instalación
+
+Clona este repositorio en tu máquina local. git clone https://github.com/soughtsingularity/sprint-5.git
+
+- Accede a la carpeta del proyecto. cd nombre_del_repositorio
+
+- Instala dependencias de composer: composer install
+
+- Crea el archivo .env a partir de example.env cp .example.env .env 
+
+IMPORTANTE: eN ALGUNOS ENTORNOS ES NECESARIO CAMBIAR LA VARIABLE DE ENTORNO APP_MAINTENANCE_DRIVER a file
+
+- Genera las llaves secretas php artisan key:generate
+- Instala passport, spatie y swagger
+
+```
+composer require laravel/passport
+php artisan migrate
+php artisan passport:install
+
+```
+```
+composer require spatie/laravel-permission
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+php artisan migrate
+```
+```
+composer require "darkaonline/l5-swagger"
+php artisan vendor:publish --provider="L5Swagger\L5SwaggerServiceProvider"
+```
+Una vez instalado passport debes incluir las claves de cliente y passeord que se te darán en el archivo .env
+
+```
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID=1
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=secret
+
+PASSPORT_PASSWORD_GRANT_CLIENT_ID=2
+PASSPORT_PASSWORD_GRANT_CLIENT_SECRET=secret
+```
+php artisan migrate
+
+(Debes crear una base de datos en Mysql / Mariadb llamada 'kognos' o modificar el archivo .env del proyecto para que la aplicación se comunique correctamente con tu base de datos)
+
+Puebla la base de datos mediante los seeders implementados en la aplicación:
+
+php artisan db:seed. DataBaseSeeder contiene
+
+- Usuarios para poder hacer las pruebas (user y admin)
+- El seed de spatie para roles y permisos en la aplicación
+- La creación de dos cliente de passport
+
+La aplicación está pensada para que, en el entorno de testing, los datos creados en el test no persistan en memoria, y al mismo tiempo, para que nuestra base de datos siempre tenga las tablas necesarias para gestionar usuarios, cursos, su relación, roles y permisos de spatie y secretos de Passport
+
+Recuerda, en la raíz del proyecto, ejecutar el comando composer install para que los paquetes utilizados en el proyecto, y listandos en el archivo composer.json, sean instalados.
+
+⏩ Ejecución
+
+Ejecuta php artisan servey accede, por defecto, a 127.0.0.1:8000
