@@ -89,6 +89,38 @@ class DatabaseSeeder extends Seeder
                             'url' => 'https://www.youtube.com/watch?v=654321',
                         ],
                     ]
+                    ],
+                [
+                    'title' => 'Capítulo 2',
+                    'description' => 'Descripción del capítulo 2',
+                    'videos' => [
+                        [
+                            'title' => 'Test Video 3',
+                            'description' => 'This is a test video 3',
+                            'url' => 'https://www.youtube.com/watch?v=789012',
+                        ],
+                        [
+                            'title' => 'Test Video 4',
+                            'description' => 'This is a test video 4',
+                            'url' => 'https://www.youtube.com/watch?v=210987',
+                        ],
+                    ]
+                    ],
+                [
+                    'title' => 'Capítulo 3',
+                    'description' => 'Descripción del capítulo 3',
+                    'videos' => [
+                        [
+                            'title' => 'Test Video 5',
+                            'description' => 'This is a test video 5',
+                            'url' => 'https://www.youtube.com/watch?v=345678',
+                        ],
+                        [
+                            'title' => 'Test Video 6',
+                            'description' => 'This is a test video 6',
+                            'url' => 'https://www.youtube.com/watch?v=876543',
+                        ],
+                    ]
                 ]
             ]
         ]);
