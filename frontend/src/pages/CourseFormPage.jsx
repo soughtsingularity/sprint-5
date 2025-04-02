@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 function CourseFormPage() {
-  const { token } = useAuth();
+  const { id } = useParams(); // Si existe, estamos editando
   const navigate = useNavigate();
+  const { token } = useAuth();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -17,6 +18,25 @@ function CourseFormPage() {
       videos: [{ title: "", description: "", url: "" }],
     },
   ]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    axios
+      .get(`http://localhost:8000/api/courses/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        const data = res.data.data;
+        setTitle(data.title);
+        setDescription(data.description);
+        setContent(data.content);
+      })
+      .catch((err) => {
+        toast.error("Error al cargar el curso");
+        console.error(err);
+      });
+  }, [id, token]);
 
   const handleAddChapter = () => {
     setContent([
@@ -55,23 +75,29 @@ function CourseFormPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = { title, description, content };
+    const url = id
+      ? `http://localhost:8000/api/courses/${id}`
+      : `http://localhost:8000/api/courses`;
+    const method = id ? "put" : "post";
+
     try {
-      await axios.post(
-        "http://localhost:8000/api/courses",
-        { title, description, content },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("Curso creado con éxito");
+      await axios[method](url, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success(id ? "Curso actualizado" : "Curso creado con éxito");
       navigate("/courses");
     } catch (err) {
-      toast.error("Error al crear el curso");
+      toast.error("Error al guardar el curso");
       console.error(err);
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Crear nuevo curso</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {id ? "Editar curso" : "Crear nuevo curso"}
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <input
           type="text"
@@ -173,7 +199,7 @@ function CourseFormPage() {
           type="submit"
           className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 block ml-auto"
         >
-          Crear curso
+          {id ? "Actualizar curso" : "Crear curso"}
         </button>
       </form>
     </div>
@@ -181,3 +207,4 @@ function CourseFormPage() {
 }
 
 export default CourseFormPage;
+
