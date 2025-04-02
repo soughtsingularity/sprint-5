@@ -1,10 +1,13 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function UserDashboardPage() {
-  const { token, user } = useAuth();
+  const { token, user, logout } = useAuth();
   const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) return;
@@ -21,6 +24,25 @@ function UserDashboardPage() {
       })
       .catch((err) => console.error("Error cargando perfil:", err));
   }, [user, token]);
+
+  const handleDeleteAccount = async () => {
+    if (!window.confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) return;
+
+    try {
+      await axios.delete(`http://localhost:8000/api/users/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      toast.success("Cuenta eliminada con éxito");
+      logout(); // Borra token y user
+      navigate("/"); // Redirige al home
+    } catch (err) {
+      console.error("Error al eliminar cuenta:", err);
+      toast.error("No se pudo eliminar la cuenta");
+    }
+  };
 
   if (!profile) return <p className="text-center mt-10">Cargando perfil...</p>;
 
@@ -45,6 +67,13 @@ function UserDashboardPage() {
       ) : (
         <p>No estás inscrito en ningún curso.</p>
       )}
+
+      <button
+        onClick={handleDeleteAccount}
+        className="mt-6 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+      >
+        Eliminar cuenta
+      </button>
     </div>
   );
 }
