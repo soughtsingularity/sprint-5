@@ -85,9 +85,20 @@ class CourseController extends Controller
 
     public function store(CourseCreateRequest $request)
     {
-        $course = Course::create($request->validated());
+        $data = $request->validated();
+    
+        // Convertir URLs de YouTube a formato embed
+        foreach ($data['content'] as &$chapter) {
+            foreach ($chapter['videos'] as &$video) {
+                $video['url'] = $this->convertToEmbedUrl($video['url']);
+            }
+        }
+    
+        $course = Course::create($data);
+    
         return response()->json($course, 201);
     }
+ 
 
     /**
  * @OA\Put(
@@ -185,7 +196,16 @@ class CourseController extends Controller
 
     public function update(CourseCreateRequest $request, Course $course)
     {
-        $course->update($request->validated());
+        $data = $request->validated();
+    
+        foreach ($data['content'] as &$chapter) {
+            foreach ($chapter['videos'] as &$video) {
+                $video['url'] = $this->convertToEmbedUrl($video['url']);
+            }
+        }
+    
+        $course->update($data);
+    
         return response()->json($course, 200);
     }
 
@@ -232,6 +252,16 @@ class CourseController extends Controller
  *     )
  * )
  */
+
+    private function convertToEmbedUrl($url)
+    {
+        // Extrae el ID del video
+        if (preg_match('/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([\w\-]+)/', $url, $matches)) {
+            return 'https://www.youtube.com/embed/' . $matches[1];
+        }
+
+        return $url; // Si no es una URL válida de YouTube, la deja tal cual
+    }
 
     public function destroy(Course $course)
     {
