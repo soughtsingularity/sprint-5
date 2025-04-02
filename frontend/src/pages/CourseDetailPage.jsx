@@ -2,14 +2,17 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "react-toastify";
+
 
 function CourseDetailPage() {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [completed, setCompleted] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [chapterIndex, setChapterIndex] = useState(0);
   const { user, token } = useAuth();
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [chapterIndex, setChapterIndex] = useState(0);
   
 
 
@@ -19,21 +22,76 @@ function CourseDetailPage() {
       .then((res) => {
         console.log("Datos recibidos del curso:", res.data.data);
         setCourse(res.data.data);
+        if (user && res.data.data.users) {
+          const enrolled = res.data.data.users.some((u) => u.id === user.id);
+          setIsEnrolled(enrolled);
+        }
         setCompleted([]);
       })
       .catch((err) => console.error("Error loading course:", err))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, user]);
+  
 
   if (loading) return <p className="text-center mt-10">Cargando curso...</p>;
   if (!course) return <p className="text-center mt-10">Curso no encontrado</p>;
 
   const chapter = course.content[chapterIndex];
 
+  const handleEnroll = async () => {
+    try {
+      await axios.post(
+        `http://localhost:8000/api/courses/${course.id}/enroll`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Te has inscrito al curso");
+      setIsEnrolled(true);
+    } catch (err) {
+      toast.error("Error al inscribirte");
+    }
+  };
+  
+  const handleUnenroll = async () => {
+    try {
+      await axios.post(
+        `http://localhost:8000/api/courses/${course.id}/unenroll`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Te has desinscrito del curso");
+      setIsEnrolled(false);
+    } catch (err) {
+      toast.error("Error al desinscribirte");
+    }
+  };
+  
+  
+
   return (
     <div className="max-w-4xl mx-auto mt-10">
       <h1 className="text-3xl font-bold mb-4">{course.title}</h1>
       <p className="mb-6 text-gray-600">{course.description}</p>
+      {user && user.role === "user" && (
+  <div className="mb-6">
+    {isEnrolled ? (
+      <button
+        onClick={handleUnenroll}
+        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+      >
+        Salir del curso
+      </button>
+    ) : (
+      <button
+        onClick={handleEnroll}
+        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+      >
+        Inscribirme
+      </button>
+    )}
+  </div>
+)}
+
 
       <div className="mb-10">
         <h2 className="text-xl font-semibold mb-2">{chapter.title}</h2>

@@ -1,17 +1,19 @@
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
-import { useAuth } from "../contexts/AuthContext"; // ✅
+import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const { register, handleSubmit } = useForm();
   const { login } = useAuth();
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:8000/api/login", data);
       login(res.data.token, res.data.user);
       toast.success("Login successful");
+      navigate("/courses"); 
     } catch (err) {
       if (err.response?.status === 401) {
         toast.error("Credenciales incorrectas");

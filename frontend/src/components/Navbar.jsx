@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 function Navbar() {
@@ -12,8 +11,9 @@ function Navbar() {
       </Link>
       <div className="flex items-center space-x-4">
         <Link to="/courses" className="text-gray-700 hover:text-blue-700">
-          Courses
+          Cursos
         </Link>
+
         {!user && (
           <>
             <Link to="/login" className="text-gray-700 hover:text-blue-700">
@@ -24,9 +24,13 @@ function Navbar() {
             </Link>
           </>
         )}
+
         {user && (
           <>
-            <span className="text-sm text-gray-600">Hello, {user.username}</span>
+            <Link to="/dashboard" className="text-gray-700 hover:text-blue-700">
+              Dashboard
+            </Link>
+            <span className="text-sm text-gray-600">Hola, {user.username}</span>
             <button
               onClick={logout}
               className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
@@ -41,3 +45,4 @@ function Navbar() {
 }
 
 export default Navbar;
+
