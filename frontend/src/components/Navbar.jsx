@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 function Navbar() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
 
   return (
     <nav className="flex justify-between items-center px-6 py-3 bg-gray-100 shadow">

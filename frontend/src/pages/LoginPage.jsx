@@ -1,19 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext"; // ✅
 import axios from "axios";
 import { toast } from "react-toastify";
 
 function LoginPage() {
   const { register, handleSubmit } = useForm();
-  const { login } = useContext(AuthContext);
-
+  const { login } = useAuth();
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:8000/api/login", data);
-      login(res.data.user, res.data.token); // Guarda en contexto
+      login(res.data.token, res.data.user);
       toast.success("Login successful");
-      // Redirigir o hacer algo tras login
     } catch (err) {
       if (err.response?.status === 401) {
         toast.error("Credenciales incorrectas");
