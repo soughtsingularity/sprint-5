@@ -4,6 +4,7 @@ import RegisterPage from "../pages/RegisterPage";
 import CourseListPage from "../pages/CourseListPage";
 import CourseDetailPage from "../pages/CourseDetailPage";
 import UserDashboardPage from "../pages/UserDashboardPage";
+import AdminUserListPage from "../pages/AdminUserListPage";
 
 
 function AppRouter() {
@@ -15,6 +16,7 @@ function AppRouter() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/dashboard" element={<UserDashboardPage />} />
       <Route path="/courses/:id" element={<CourseDetailPage />} />
+      <Route path="/admin/users" element={<AdminUserListPage />} />
     </Routes>
   );
 }

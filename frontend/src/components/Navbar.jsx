@@ -27,10 +27,17 @@ function Navbar() {
 
         {user && (
           <>
-            <Link to="/dashboard" className="text-gray-700 hover:text-blue-700">
-              Dashboard
-            </Link>
-            <span className="text-sm text-gray-600">Hola, {user.username}</span>
+            {user.role === "user" && (
+              <Link to="/dashboard" className="text-gray-700 hover:text-blue-700">
+                Dashboard
+              </Link>
+            )}
+            {user.role === "admin" && (
+              <Link to="/admin/users" className="text-gray-700 hover:text-blue-700">
+                Usuarios
+              </Link>
+            )}
+            <span className="text-sm text-gray-600">Hello, {user.username}</span>
             <button
               onClick={logout}
               className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
@@ -39,6 +46,7 @@ function Navbar() {
             </button>
           </>
         )}
+
       </div>
     </nav>
   );
