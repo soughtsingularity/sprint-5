@@ -31,7 +31,6 @@ function CourseListPage() {
           </Link>
         )}
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {courses.map((course) => (
           <div key={course.id} className="border rounded p-4 shadow">
@@ -43,7 +42,16 @@ function CourseListPage() {
             >
               Ver curso
             </Link>
+            {user?.role === "admin" && (
+            <Link
+              to={`/admin/courses/${course.id}`}
+              className="inline-block bg-yellow-500 text-white px-4 py-2 mt-2 rounded hover:bg-yellow-600 text-sm"
+            >
+              Editar curso
+            </Link>
+          )}
           </div>
+          
         ))}
       </div>
     </div>

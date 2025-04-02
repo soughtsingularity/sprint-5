@@ -7,7 +7,6 @@ import UserDashboardPage from "../pages/UserDashboardPage";
 import AdminUserListPage from "../pages/AdminUserListPage";
 import CourseFormPage from "../pages/CourseFormPage";
 
-
 function AppRouter() {
   return (
     <Routes>
@@ -19,6 +18,8 @@ function AppRouter() {
       <Route path="/courses/:id" element={<CourseDetailPage />} />
       <Route path="/admin/users" element={<AdminUserListPage />} />
       <Route path="/admin/courses/new" element={<CourseFormPage />} />
+      <Route path="/admin/courses/:id" element={<CourseFormPage />} />
+
     </Routes>
   );
 }
