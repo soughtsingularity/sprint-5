@@ -93,7 +93,7 @@ class CourseListController extends Controller
 
     public function show($id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::with('users')->findOrFail($id);
         return new FullCourseResource($course);
     }
 }
