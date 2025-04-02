@@ -5,10 +5,9 @@ import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 
 function CourseFormPage() {
-  const { id } = useParams(); // Si existe, estamos editando
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const { token } = useAuth();
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState([
@@ -92,6 +91,22 @@ function CourseFormPage() {
       console.error(err);
     }
   };
+
+  const handleDelete = async () => {
+    if (!window.confirm("¿Seguro que quieres eliminar este curso?")) return;
+  
+    try {
+      await axios.delete(`http://localhost:8000/api/courses/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Curso eliminado");
+      navigate("/courses");
+    } catch (err) {
+      console.error("Error al eliminar curso:", err);
+      toast.error("No se pudo eliminar el curso");
+    }
+  };
+  
 
   return (
     <div className="max-w-4xl mx-auto mt-10">
@@ -201,6 +216,15 @@ function CourseFormPage() {
         >
           {id ? "Actualizar curso" : "Crear curso"}
         </button>
+        {id && (
+        <button
+            type="button"
+            onClick={handleDelete}
+            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 block ml-auto"
+        >
+            Eliminar curso
+        </button>
+)}
       </form>
     </div>
   );
