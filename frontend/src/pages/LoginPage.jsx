@@ -11,7 +11,7 @@ function LoginPage() {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:8000/api/login", data);
-      login(res.data.token, res.data.user);
+      login(res.data.user, res.data.token);      
       toast.success("Login successful");
       navigate("/courses"); 
     } catch (err) {

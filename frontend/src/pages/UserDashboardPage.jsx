@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+
 function UserDashboardPage() {
   const { token, user, logout } = useAuth();
   const [profile, setProfile] = useState(null);
@@ -36,8 +37,8 @@ function UserDashboardPage() {
       });
 
       toast.success("Cuenta eliminada con éxito");
-      logout(); // Borra token y user
-      navigate("/"); // Redirige al home
+      logout(); 
+      navigate("/"); 
     } catch (err) {
       console.error("Error al eliminar cuenta:", err);
       toast.error("No se pudo eliminar la cuenta");
@@ -55,18 +56,26 @@ function UserDashboardPage() {
       <h2 className="text-xl font-semibold mt-6 mb-2">Mis Cursos</h2>
       {profile.courses?.length > 0 ? (
         profile.courses.map((course) => (
-          <div
-            key={course.id}
-            className="border p-4 rounded shadow mb-4 bg-white"
-          >
-            <h3 className="text-lg font-semibold">{course.title}</h3>
-            <p className="text-sm text-gray-600">Progreso: {course.progress}%</p>
-            <p className="text-sm text-gray-600">Medalla: {course.medal}</p>
+        <div
+          key={course.id}
+          onClick={() => navigate(`/courses/${course.id}`)}
+          className="border p-4 rounded shadow mb-4 bg-white cursor-pointer hover:bg-gray-50 transition"
+        >
+          <h3 className="text-lg font-semibold">{course.title}</h3>
+          <p className="text-sm text-gray-600 mb-2">Progreso: {course.progress}%</p>
+          <div className="w-full bg-gray-200 rounded h-4 mb-2">
+            <div
+              className="bg-green-500 h-4 rounded"
+              style={{ width: `${course.progress}%`, transition: "width 0.3s" }}
+            ></div>
+          </div>
+          <p className="text-sm text-gray-600">Medalla: {course.medal || "Sin medalla"}</p>
           </div>
         ))
       ) : (
         <p>No estás inscrito en ningún curso.</p>
       )}
+
 
       <button
         onClick={handleDeleteAccount}
