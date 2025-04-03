@@ -43,8 +43,9 @@ function CourseDetailPage() {
   };
 
   useEffect(() => {
-    if (token) fetchCourse();
-  }, [id, token]);
+    fetchCourse(); 
+  }, [id]);
+  
 
   useEffect(() => {
     if (!loading && course?.content && completed) {
