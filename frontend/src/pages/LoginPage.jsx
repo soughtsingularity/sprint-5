@@ -11,8 +11,8 @@ function LoginPage() {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:8000/api/login", data);
-      login(res.data.user, res.data.token);      
-      toast.success("Login successful");
+      login(res.data.user, res.data.token);  
+      console.log("user devuelto:", res.data.user);    
       navigate("/courses"); 
     } catch (err) {
       if (err.response?.status === 401) {

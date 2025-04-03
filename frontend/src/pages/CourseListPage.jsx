@@ -25,7 +25,6 @@ function CourseListPage() {
       await axios.delete(`http://localhost:8000/api/courses/${courseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("Curso eliminado");
       setCourses((prev) => prev.filter((c) => c.id !== courseId));
     } catch (err) {
       console.error("Error al eliminar curso:", err);

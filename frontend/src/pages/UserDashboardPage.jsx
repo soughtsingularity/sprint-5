@@ -35,7 +35,6 @@ function UserDashboardPage() {
         },
       });
 
-      toast.success("Cuenta eliminada con éxito");
       logout();
       navigate("/");
     } catch (err) {

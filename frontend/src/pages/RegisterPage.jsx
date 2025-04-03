@@ -13,7 +13,6 @@ function RegisterPage() {
     try {
       const res = await axios.post("http://localhost:8000/api/register", data);
       login(res.data.token, res.data.user);
-      toast.success("Registro exitoso");
       navigate("/courses");
     } catch (err) {
       if (err.response?.status === 422) {

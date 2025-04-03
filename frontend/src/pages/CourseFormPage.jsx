@@ -84,7 +84,6 @@ function CourseFormPage() {
       await axios[method](url, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success(id ? "Curso actualizado" : "Curso creado con éxito");
       navigate("/courses");
     } catch (err) {
       toast.error("Error al guardar el curso");
@@ -99,7 +98,6 @@ function CourseFormPage() {
       await axios.delete(`http://localhost:8000/api/courses/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      toast.success("Curso eliminado");
       navigate("/courses");
     } catch (err) {
       console.error("Error al eliminar curso:", err);

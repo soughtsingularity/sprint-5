@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();             
+    navigate("/courses"); 
+  };
 
   return (
     <nav className="flex justify-between items-center px-6 py-4 bg-white border-b border-gray-200 shadow-sm">
@@ -54,7 +60,7 @@ function Navbar() {
             )}
             <span className="text-sm text-gray-600">Hola, {user.username}</span>
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800 text-sm transition"
             >
               Logout

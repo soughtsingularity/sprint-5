@@ -13,7 +13,7 @@ function CourseDetailPage() {
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [chapterIndex, setChapterIndex] = useState(0);
   const [medal, setMedal] = useState(null);
-  const [progress, setProgress] = useState(null); // null para detectar carga completa
+  const [progress, setProgress] = useState(null); 
   const navigate = useNavigate();
 
   const fetchCourse = async () => {
@@ -66,19 +66,15 @@ function CourseDetailPage() {
 
   useEffect(() => {
     if (!loading && course?.content && Array.isArray(completed)) {
-      console.log("🚨 completed:", completed);
-      console.log("📘 course length:", course.content.length);
   
       if (completed.length > 0) {
         const nextChapter = completed.length;
-        console.log("➡️ Ir al capítulo:", nextChapter);
         if (nextChapter < course.content.length) {
           setChapterIndex(nextChapter);
         } else {
           setChapterIndex(course.content.length - 1);
         }
       } else {
-        console.log("🔁 Sin capítulos completados. Ir al 0");
         setChapterIndex(0);
       }
     }
@@ -99,9 +95,8 @@ function CourseDetailPage() {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Te has inscrito al curso");
       setIsEnrolled(true);
-      await fetchCourse(); // <--- recargar estado del curso
+      await fetchCourse(); 
     } catch (err) {
       toast.error("Error al inscribirte");
     }
@@ -114,9 +109,8 @@ function CourseDetailPage() {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      toast.success("Te has desinscrito del curso");
       setIsEnrolled(false);
-      await fetchCourse(); // <--- recargar estado
+      await fetchCourse(); 
     } catch (err) {
       toast.error("Error al desinscribirte");
     }
@@ -130,16 +124,20 @@ function CourseDetailPage() {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      toast.success("Capítulo completado 🎉");
-
       setCompleted(res.data.completed_chapters);
       setProgress(res.data.progress);
-
+      toast.success("Capítulo completado 🎉");
     } catch (err) {
       console.error("Error al marcar capítulo como completado:", err);
+  
+      if (err.response && err.response.status >= 400 && err.response.status < 500) {
+        toast.error("Este capítulo ya fue completado.");
+      } else {
+        toast.error("Error al marcar el capítulo.");
+      }
     }
   };
+  
 
   return (
 <div className="max-w-4xl mx-auto mt-12 px-6">
