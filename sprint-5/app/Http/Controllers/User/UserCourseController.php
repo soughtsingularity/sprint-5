@@ -70,8 +70,11 @@ class UserCourseController extends Controller
             ], 409);
         }
 
-        $user->courses()->attach($course->id);
-
+        $user->courses()->attach($course->id, [
+            'progress' => 0,
+            'completed_chapters' => json_encode([]),
+            'medal' => null
+        ]);
 
         return response()->json([
             'message' => 'You have successfully enrolled in the course',

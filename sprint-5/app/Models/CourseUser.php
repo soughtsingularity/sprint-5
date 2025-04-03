@@ -13,11 +13,16 @@ class CourseUser extends Pivot
         'user_id',
         'course_id',
         'progress',
-        'medal'
+        'medal',
+        'completed_chapters'
     ];
 
     protected $appends = [
         'computed_medal',
+    ];
+
+    protected $casts = [
+        'completed_chapters' => 'array',
     ];
 
     public function getComputedMedalAttribute(): ?string

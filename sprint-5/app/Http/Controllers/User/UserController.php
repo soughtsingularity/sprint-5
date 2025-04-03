@@ -134,8 +134,13 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            $user->load('courses:id,title');
-    
+            $user->load(['courses' => function ($query) {
+                $query->addSelect('courses.id', 'courses.title') 
+                      ->withPivot('progress', 'medal', 'completed_chapters');
+            }]);
+            
+            
+                
             if ($user->id !== auth()->id() && !auth()->user()->hasRole('admin')) {
                 return response()->json(['message' => 'Forbidden'], 403);
             }
