@@ -70,8 +70,4 @@ class LoginUserFailTest extends TestCase
 
 
     }
-
-
-
-
 }

@@ -8,68 +8,81 @@ use App\Models\Course;
 
 class CompletedChapterController extends Controller
 {
-    /**
- * @OA\Post(
- *     path="/api/courses/{courseId}/chapters/{chapterIndex}/complete",
- *     summary="Marcar capítulo como completado",
- *     description="Permite a un usuario marcar un capítulo como completado y actualizar su progreso en el curso.",
- *     operationId="completeChapter",
- *     tags={"Progress"},
- *     security={{"passport":{}}},
- * 
- *     @OA\Parameter(
- *         name="courseId",
- *         in="path",
- *         description="ID del curso",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Parameter(
- *         name="chapterIndex",
- *         in="path",
- *         description="Índice del capítulo (comienza en 0)",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *
- *     @OA\Response(
- *         response=200,
- *         description="Capítulo completado correctamente",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="Chapter completed successfully."),
- *             @OA\Property(property="progress", type="integer", example=100)
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="Capítulo ya completado",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="Chapter already completed")
- *         )
- *     ),
- *     @OA\Response(
- *         response=403,
- *         description="Usuario no inscrito en el curso o sin rol adecuado",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="You are not enrolled in this course.")
- *         )
- *     ),
- *     @OA\Response(
- *         response=401,
- *         description="Token ausente o inválido",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="Unauthenticated.")
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Curso no encontrado",
- *         @OA\JsonContent(
- *             @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Course] 999")
- *         )
- *     )
- * )
- */
+
+        /**
+     * @OA\Post(
+     *     path="/api/courses/{courseId}/chapters/{chapterIndex}/complete",
+     *     summary="Mark chapter as completed",
+     *     description="Marks a chapter as completed for the authenticated user. Updates the user's progress and assigns a medal based on the percentage of completion. Requires the user to be enrolled in the course.",
+     *     tags={"Progress"},
+     *     security={{"passport": {}}},
+     *
+     *     @OA\Parameter(
+     *         name="courseId",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the course",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="chapterIndex",
+     *         in="path",
+     *         required=true,
+     *         description="Index of the chapter to complete (starting from 0)",
+     *         @OA\Schema(type="integer", example=0)
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Chapter marked as completed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Chapter completed successfully."),
+     *             @OA\Property(property="progress", type="integer", example=100),
+     *             @OA\Property(property="completed_chapters", type="array", @OA\Items(type="integer")),
+     *             @OA\Property(property="medal", type="string", example="gold")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Chapter already completed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Chapter already completed")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - missing or invalid token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden - user not enrolled in the course or lacks 'user' role",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="You are not enrolled in this course.")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=404,
+     *         description="Course not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Course] 999")
+     *         )
+     *     )
+     * )
+     *
+     * Headers para Postman:
+     * - Accept: application/json
+     * - Content-Type: application/json
+     * - Authorization: Bearer {token}
+     */
+
+
 
     public function __invoke(Request $request, $courseId, $chapterIndex)
     {
@@ -110,7 +123,6 @@ class CompletedChapterController extends Controller
         $total = count($chapters);
         $progress = $total > 0 ? round((count($completedChapters) / $total) * 100) : 0;
     
-        // 🏅 Lógica de medallas
         $medal = null;
         if ($progress >= 90) $medal = 'gold';
         elseif ($progress >= 50) $medal = 'silver';
@@ -129,10 +141,4 @@ class CompletedChapterController extends Controller
             'medal' => $medal,
         ]);
     }
- 
- 
- 
- 
-    
-
 }
