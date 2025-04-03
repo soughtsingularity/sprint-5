@@ -25,8 +25,6 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", tokenData);
   };
   
-  
-  
 
   const logout = () => {
     setToken(null);

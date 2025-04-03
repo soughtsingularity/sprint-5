@@ -1,25 +1,40 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();             
+    navigate("/courses"); 
+  };
 
   return (
-    <nav className="flex justify-between items-center px-6 py-3 bg-gray-100 shadow">
-      <Link to="/" className="text-xl font-bold text-blue-700">
+    <nav className="flex justify-between items-center px-6 py-4 bg-white border-b border-gray-200 shadow-sm">
+      <Link to="/" className="text-2xl font-bold text-gray-900">
         Kognos
       </Link>
       <div className="flex items-center space-x-4">
-        <Link to="/courses" className="text-gray-700 hover:text-blue-700">
+        <Link
+          to="/courses"
+          className="text-gray-700 hover:text-black transition"
+        >
           Cursos
         </Link>
 
         {!user && (
           <>
-            <Link to="/login" className="text-gray-700 hover:text-blue-700">
+            <Link
+              to="/login"
+              className="text-gray-700 hover:text-black transition"
+            >
               Login
             </Link>
-            <Link to="/register" className="text-gray-700 hover:text-blue-700">
+            <Link
+              to="/register"
+              className="text-gray-700 hover:text-black transition"
+            >
               Register
             </Link>
           </>
@@ -28,29 +43,35 @@ function Navbar() {
         {user && (
           <>
             {user.role === "user" && (
-              <Link to="/dashboard" className="text-gray-700 hover:text-blue-700">
+              <Link
+                to="/dashboard"
+                className="text-gray-700 hover:text-black transition"
+              >
                 Dashboard
               </Link>
             )}
             {user.role === "admin" && (
-              <Link to="/admin/users" className="text-gray-700 hover:text-blue-700">
+              <Link
+                to="/admin/users"
+                className="text-gray-700 hover:text-black transition"
+              >
                 Usuarios
               </Link>
             )}
-            <span className="text-sm text-gray-600">Hello, {user.username}</span>
+            <span className="text-sm text-gray-600">Hola, {user.username}</span>
             <button
-              onClick={logout}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+              onClick={handleLogout}
+              className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800 text-sm transition"
             >
               Logout
             </button>
           </>
         )}
-
       </div>
     </nav>
   );
 }
 
 export default Navbar;
+
 
