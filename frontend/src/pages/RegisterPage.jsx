@@ -12,7 +12,7 @@ function RegisterPage() {
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:8000/api/register", data);
-      login(res.data.token, res.data.user);;
+      login(res.data.token, res.data.user);
       toast.success("Registro exitoso");
       navigate("/courses");
     } catch (err) {
@@ -28,14 +28,38 @@ function RegisterPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4 text-center">Crear cuenta</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <input {...register("username")} placeholder="Nombre de usuario" className="w-full border p-2 rounded" />
-        <input {...register("email")} type="email" placeholder="Correo electrónico" className="w-full border p-2 rounded" />
-        <input {...register("password")} type="password" placeholder="Contraseña" className="w-full border p-2 rounded" />
-        <input {...register("password_confirmation")} type="password" placeholder="Confirmar contraseña" className="w-full border p-2 rounded" />
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">Registrarse</button>
+    <div className="max-w-md mx-auto mt-16 p-8 bg-white border border-gray-300 rounded-xl shadow-lg">
+      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">Crear cuenta</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <input
+          {...register("username")}
+          placeholder="Nombre de usuario"
+          className="w-full p-3 border border-gray-300 rounded bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-700"
+        />
+        <input
+          {...register("email")}
+          type="email"
+          placeholder="Correo electrónico"
+          className="w-full p-3 border border-gray-300 rounded bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-700"
+        />
+        <input
+          {...register("password")}
+          type="password"
+          placeholder="Contraseña"
+          className="w-full p-3 border border-gray-300 rounded bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-700"
+        />
+        <input
+          {...register("password_confirmation")}
+          type="password"
+          placeholder="Confirmar contraseña"
+          className="w-full p-3 border border-gray-300 rounded bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-700"
+        />
+        <button
+          type="submit"
+          className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition"
+        >
+          Registrarse
+        </button>
       </form>
     </div>
   );

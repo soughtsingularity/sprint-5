@@ -109,124 +109,130 @@ function CourseFormPage() {
   
 
   return (
-    <div className="max-w-4xl mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">
-        {id ? "Editar curso" : "Crear nuevo curso"}
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
+<div className="max-w-4xl mx-auto mt-12 px-6">
+  <h1 className="text-3xl font-bold mb-8 text-gray-800">
+    {id ? "Editar curso" : "Crear nuevo curso"}
+  </h1>
+
+  <form onSubmit={handleSubmit} className="space-y-8">
+    <input
+      type="text"
+      placeholder="Título del curso"
+      className="w-full p-3 border border-gray-300 rounded bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-700"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      required
+    />
+    <textarea
+      placeholder="Descripción del curso"
+      className="w-full p-3 border border-gray-300 rounded bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-700"
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+      required
+    />
+
+    {content.map((chapter, i) => (
+      <div key={i} className="border border-gray-300 rounded-lg p-5 space-y-4 bg-white shadow-sm">
+        <h2 className="font-semibold text-lg text-gray-800">Capítulo {i + 1}</h2>
         <input
           type="text"
-          placeholder="Título del curso"
-          className="w-full p-2 border rounded"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Título del capítulo"
+          className="w-full p-2 border border-gray-300 rounded bg-gray-50 focus:outline-none"
+          value={chapter.title}
+          onChange={(e) => handleChapterChange(i, "title", e.target.value)}
           required
         />
         <textarea
-          placeholder="Descripción del curso"
-          className="w-full p-2 border rounded"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Descripción del capítulo"
+          className="w-full p-2 border border-gray-300 rounded bg-gray-50 focus:outline-none"
+          value={chapter.description}
+          onChange={(e) => handleChapterChange(i, "description", e.target.value)}
           required
         />
 
-        {content.map((chapter, i) => (
-          <div key={i} className="border p-4 rounded space-y-4 bg-gray-50">
-            <h2 className="font-semibold text-lg">Capítulo {i + 1}</h2>
-            <input
-              type="text"
-              placeholder="Título del capítulo"
-              className="w-full p-2 border rounded"
-              value={chapter.title}
-              onChange={(e) => handleChapterChange(i, "title", e.target.value)}
-              required
-            />
-            <textarea
-              placeholder="Descripción del capítulo"
-              className="w-full p-2 border rounded"
-              value={chapter.description}
-              onChange={(e) => handleChapterChange(i, "description", e.target.value)}
-              required
-            />
-            <div className="space-y-2">
-              {chapter.videos.map((video, j) => (
-                <div key={j} className="space-y-1 bg-white p-2 rounded shadow">
-                  <input
-                    type="text"
-                    placeholder="Título del vídeo"
-                    className="w-full p-1 border rounded"
-                    value={video.title}
-                    onChange={(e) => handleVideoChange(i, j, "title", e.target.value)}
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Descripción del vídeo"
-                    className="w-full p-1 border rounded"
-                    value={video.description}
-                    onChange={(e) => handleVideoChange(i, j, "description", e.target.value)}
-                  />
-                  <input
-                    type="url"
-                    placeholder="URL del vídeo"
-                    className="w-full p-1 border rounded"
-                    value={video.url}
-                    onChange={(e) => handleVideoChange(i, j, "url", e.target.value)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveVideo(i, j)}
-                    className="text-red-600 text-sm"
-                  >
-                    Eliminar vídeo
-                  </button>
-                </div>
-              ))}
+        <div className="space-y-3">
+          {chapter.videos.map((video, j) => (
+            <div key={j} className="space-y-2 bg-gray-50 p-4 rounded border border-gray-200">
+              <input
+                type="text"
+                placeholder="Título del vídeo"
+                className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none"
+                value={video.title}
+                onChange={(e) => handleVideoChange(i, j, "title", e.target.value)}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Descripción del vídeo"
+                className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none"
+                value={video.description}
+                onChange={(e) => handleVideoChange(i, j, "description", e.target.value)}
+              />
+              <input
+                type="url"
+                placeholder="URL del vídeo"
+                className="w-full p-2 border border-gray-300 rounded bg-white focus:outline-none"
+                value={video.url}
+                onChange={(e) => handleVideoChange(i, j, "url", e.target.value)}
+                required
+              />
               <button
                 type="button"
-                onClick={() => handleAddVideo(i)}
-                className="text-blue-600 text-sm"
+                onClick={() => handleRemoveVideo(i, j)}
+                className="text-sm text-red-600 hover:underline"
               >
-                + Añadir vídeo
+                Eliminar vídeo
               </button>
             </div>
+          ))}
 
-            <button
-              type="button"
-              onClick={() => handleRemoveChapter(i)}
-              className="text-red-600 text-sm"
-            >
-              Eliminar capítulo
-            </button>
-          </div>
-        ))}
+          <button
+            type="button"
+            onClick={() => handleAddVideo(i)}
+            className="text-sm text-gray-700 hover:text-black"
+          >
+            + Añadir vídeo
+          </button>
+        </div>
 
         <button
           type="button"
-          onClick={handleAddChapter}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={() => handleRemoveChapter(i)}
+          className="text-sm text-red-600 hover:underline"
         >
-          + Añadir capítulo
+          Eliminar capítulo
         </button>
+      </div>
+    ))}
 
+    <button
+      type="button"
+      onClick={handleAddChapter}
+      className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+    >
+      + Añadir capítulo
+    </button>
+
+    <div className="flex flex-col sm:flex-row sm:justify-end gap-4 mt-6">
+      <button
+        type="submit"
+        className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-800 transition"
+      >
+        {id ? "Actualizar curso" : "Crear curso"}
+      </button>
+      {id && (
         <button
-          type="submit"
-          className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 block ml-auto"
+          type="button"
+          onClick={handleDelete}
+          className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
         >
-          {id ? "Actualizar curso" : "Crear curso"}
+          Eliminar curso
         </button>
-        {id && (
-        <button
-            type="button"
-            onClick={handleDelete}
-            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 block ml-auto"
-        >
-            Eliminar curso
-        </button>
-)}
-      </form>
+      )}
     </div>
+  </form>
+</div>
+
   );
 }
 
