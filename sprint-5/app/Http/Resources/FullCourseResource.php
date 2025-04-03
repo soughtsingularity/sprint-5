@@ -10,7 +10,8 @@ class FullCourseResource extends JsonResource
 {
     public function toArray($request)
     {
-        $user = auth()->user();
+        $user = $this->additional['auth_user'] ?? auth()->user();
+        
         $pivot = null;
         $progress = null;
         $completed = [];
@@ -43,7 +44,6 @@ class FullCourseResource extends JsonResource
             'is_enrolled' => $isEnrolled,
         ];
     }
-    
     
 }
 

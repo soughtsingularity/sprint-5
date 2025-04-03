@@ -31,8 +31,7 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware('role:admin|user')->group(function () {
         Route::middleware('permission:view-user-info')
             ->get('/users/{user}', [UserController::class, 'show']);
-        // Route::get('/courses', [CourseListController::class, 'index']);
-        Route::get('/courses/{course}', [CourseListController::class, 'show']);
+
         
     });
 
@@ -50,4 +49,5 @@ Route::middleware('auth:api')->group(function () {
 
 
 Route::get('/courses', [CourseListController::class, 'index']);
-//Route::get('/courses/{course}', [CourseListController::class, 'show']);
+Route::get('/courses/{course}', [CourseListController::class, 'show']);
+
