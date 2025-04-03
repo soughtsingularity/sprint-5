@@ -20,6 +20,7 @@ class CourseResource extends JsonResource
             'description' => $this->description,
             'progress' => $this->pivot->progress ?? null,
             'medal' => $this->pivot->medal ?? null,
+            'completed_chapters' => $this->pivot->completed_chapters ?? [],
         ];
     }
 }

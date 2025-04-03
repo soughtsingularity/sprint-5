@@ -28,7 +28,7 @@ class UpdateCourseTest extends ApiTestCase
                         [
                             'title' => 'oldVideo',
                             'description' => 'oldVideo1Description',
-                            'url' => 'https://www.youtube.com/watch?v=video1'
+                            'url' => 'https://www.youtube.com/embed/video1'
                         ],
                     ]
                 ],
@@ -49,7 +49,7 @@ class UpdateCourseTest extends ApiTestCase
                         [
                             'title' => 'UpdatedVideo',
                             'description' => 'UpdatedVideo1Description',
-                            'url' => 'https://www.youtube.com/watch?v=video1'
+                            'url' => 'https://www.youtube.com/embed/video1'
                         ],
                     ]
                 ],

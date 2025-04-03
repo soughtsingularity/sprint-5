@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Http\Resources\FullCourseResource;
 use App\Http\Resources\PublicCourseResource;
+use Illuminate\Support\Facades\Auth;
 
 class CourseListController extends Controller
 {
@@ -93,7 +94,22 @@ class CourseListController extends Controller
 
     public function show($id)
     {
+        // 1. Autenticación manual si hay token
+        if ($token = request()->bearerToken()) {
+            Auth::shouldUse('api');
+    
+            try {
+                $user = Auth::user();
+            } catch (\Exception $e) {
+                $user = null;
+            }
+        } else {
+            $user = null;
+        }
+    
         $course = Course::with('users')->findOrFail($id);
-        return new FullCourseResource($course);
+    
+        return (new FullCourseResource($course))->additional(['auth_user' => $user]);
     }
+ 
 }

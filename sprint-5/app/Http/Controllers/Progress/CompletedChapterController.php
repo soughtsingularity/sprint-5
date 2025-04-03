@@ -75,50 +75,64 @@ class CompletedChapterController extends Controller
     {
         $validated = validator(
             ['chapterIndex' => $chapterIndex],
-            [
-                'chapterIndex' => 'required|integer|min:0',
-            ]
+            ['chapterIndex' => 'required|integer|min:0']
         )->validate();
-        
-        $course = Course::findOrFail($courseId);
-        
-
+    
         $user = auth()->user();
         $course = Course::findOrFail($courseId);
-        $chapters = is_string($course->content)
-        ? json_decode($course->content, true)
-        : $course->content;
     
-        if(!$user->courses()->where('course_id', $courseId)->exists()) {
-            return response()->json([
-                'message' => 'You are not enrolled in this course.',
-            ], 403);
+        if (!$user->courses()->where('course_id', $courseId)->exists()) {
+            return response()->json(['message' => 'You are not enrolled in this course.'], 403);
         }
-
-        $currentProgress = $user->courses()->where('course_id', $courseId)->first()->pivot->progress ?? 0;
-        $expectedProgress = round((($chapterIndex + 1) / count($chapters)) * 100);
-
-        if ($currentProgress >= $expectedProgress) {
+    
+        $chapters = is_string($course->content)
+            ? json_decode($course->content, true)
+            : $course->content;
+    
+        $pivot = $user->courses()->where('course_id', $courseId)->first()->pivot;
+    
+        $completedChapters = $pivot->completed_chapters ?? [];
+    
+        if (!is_array($completedChapters)) {
+            $completedChapters = json_decode($completedChapters, true) ?? [];
+        }
+    
+        $chapterIndex = (int) $chapterIndex;
+    
+        if (in_array($chapterIndex, $completedChapters)) {
             return response()->json(['message' => 'Chapter already completed'], 400);
         }
-
-
     
-        $totalChapters = count($chapters);
-        $progress = round((($chapterIndex + 1) / $totalChapters) * 100);
+        $completedChapters[] = $chapterIndex;
+        $completedChapters = array_unique($completedChapters);
+        sort($completedChapters);
+    
+        $total = count($chapters);
+        $progress = $total > 0 ? round((count($completedChapters) / $total) * 100) : 0;
+    
+        // 🏅 Lógica de medallas
+        $medal = null;
+        if ($progress >= 90) $medal = 'gold';
+        elseif ($progress >= 50) $medal = 'silver';
+        elseif ($progress >= 30) $medal = 'bronze';
     
         $user->courses()->updateExistingPivot($courseId, [
             'progress' => $progress,
+            'completed_chapters' => json_encode($completedChapters),
+            'medal' => $medal,
         ]);
     
         return response()->json([
             'message' => 'Chapter completed successfully.',
             'progress' => $progress,
-        ]);    
-        return response()->json([
-            'message' => 'Chapter completed successfully.',
+            'completed_chapters' => $completedChapters,
+            'medal' => $medal,
         ]);
     }
+ 
+ 
+ 
+ 
     
 
 }

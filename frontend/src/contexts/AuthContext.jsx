@@ -18,10 +18,15 @@ export function AuthProvider({ children }) {
     else localStorage.removeItem("user");
   }, [token, user]);
 
-  const login = (token, user) => {
-    setToken(token);
-    setUser(user);
+  const login = (userData, tokenData) => {
+    setUser(userData);
+    setToken(tokenData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", tokenData);
   };
+  
+  
+  
 
   const logout = () => {
     setToken(null);
