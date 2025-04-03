@@ -118,25 +118,39 @@ function CourseDetailPage() {
   
 
   const handleCompleteChapter = async () => {
+    if (!isEnrolled) {
+      toast.error("Debes inscribirte al curso para marcar capítulos.");
+      return;
+    }
+  
     try {
       const res = await axios.post(
         `http://localhost:8000/api/courses/${id}/chapters/${chapterIndex}/complete`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
+  
       setCompleted(res.data.completed_chapters);
       setProgress(res.data.progress);
-      toast.success("Capítulo completado 🎉");
+      
     } catch (err) {
-      console.error("Error al marcar capítulo como completado:", err);
+      const status = err.response?.status;
+      const message = err.response?.data?.message || "Error inesperado";
   
-      if (err.response && err.response.status >= 400 && err.response.status < 500) {
-        toast.error("Este capítulo ya fue completado.");
+      if (status === 400 && message.includes("already completed")) {
+        toast.info("Este capítulo ya fue completado.");
+      } else if (status === 401) {
+        toast.error("Debes iniciar sesión.");
+      } else if (status === 403) {
+        toast.error("No tienes permiso para completar este capítulo.");
+      } else if (status === 404) {
+        toast.error("El curso o capítulo no existe.");
       } else {
         toast.error("Error al marcar el capítulo.");
       }
     }
   };
+  
   
 
   return (
