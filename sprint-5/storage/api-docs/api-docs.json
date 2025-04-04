@@ -11,11 +11,12 @@
                 "tags": [
                     "Courses"
                 ],
-                "summary": "List all available courses",
+                "summary": "List all public courses",
+                "description": "Returns a list of all courses available to the public. No authentication required.",
                 "operationId": "71d606718e883e7d1e77a8a3d2a1dd1b",
                 "responses": {
                     "200": {
-                        "description": "List of available courses",
+                        "description": "List of courses retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -30,7 +31,7 @@
                                                     },
                                                     "title": {
                                                         "type": "string",
-                                                        "example": "Test Course"
+                                                        "example": "Laravel Basics"
                                                     }
                                                 },
                                                 "type": "object"
@@ -46,9 +47,10 @@
             },
             "post": {
                 "tags": [
-                    "Admin - Courses"
+                    "Courses"
                 ],
-                "summary": "Create a new course (Admin only)",
+                "summary": "Create a new course",
+                "description": "Allows an authenticated admin user with the 'create-course' permission to create a new course with multiple chapters and YouTube videos.",
                 "operationId": "08ded2eee090ddb6b165156303e3cc3c",
                 "requestBody": {
                     "required": true,
@@ -63,40 +65,49 @@
                                 "properties": {
                                     "title": {
                                         "type": "string",
-                                        "example": "New Course"
+                                        "example": "Advanced Laravel"
                                     },
                                     "description": {
                                         "type": "string",
-                                        "example": "This is a new course"
+                                        "example": "Learn Laravel step by step"
                                     },
                                     "content": {
                                         "type": "array",
                                         "items": {
+                                            "required": [
+                                                "title",
+                                                "description",
+                                                "videos"
+                                            ],
                                             "properties": {
                                                 "title": {
                                                     "type": "string",
-                                                    "example": "Capítulo 1"
+                                                    "example": "Chapter 1"
                                                 },
                                                 "description": {
                                                     "type": "string",
-                                                    "example": "Intro"
+                                                    "example": "Introduction to Laravel"
                                                 },
                                                 "videos": {
                                                     "type": "array",
                                                     "items": {
+                                                        "required": [
+                                                            "title",
+                                                            "description",
+                                                            "url"
+                                                        ],
                                                         "properties": {
                                                             "title": {
                                                                 "type": "string",
-                                                                "example": "Video 1"
+                                                                "example": "Getting Started"
                                                             },
                                                             "description": {
                                                                 "type": "string",
-                                                                "example": "Descripción video 1"
+                                                                "example": "Setup and first steps"
                                                             },
                                                             "url": {
                                                                 "type": "string",
-                                                                "format": "url",
-                                                                "example": "https://www.youtube.com/watch?v=video1"
+                                                                "example": "https://www.youtube.com/watch?v=abc123"
                                                             }
                                                         },
                                                         "type": "object"
@@ -125,15 +136,45 @@
                                         },
                                         "title": {
                                             "type": "string",
-                                            "example": "New Course"
+                                            "example": "Advanced Laravel"
                                         },
                                         "description": {
                                             "type": "string",
-                                            "example": "This is a new course"
+                                            "example": "Learn Laravel step by step"
                                         },
                                         "content": {
                                             "type": "array",
                                             "items": {
+                                                "properties": {
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Chapter 1"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Introduction to Laravel"
+                                                    },
+                                                    "videos": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "title": {
+                                                                    "type": "string",
+                                                                    "example": "Getting Started"
+                                                                },
+                                                                "description": {
+                                                                    "type": "string",
+                                                                    "example": "Setup and first steps"
+                                                                },
+                                                                "url": {
+                                                                    "type": "string",
+                                                                    "example": "https://www.youtube.com/embed/abc123"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
                                                 "type": "object"
                                             }
                                         }
@@ -144,7 +185,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized – missing or invalid token",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -160,14 +201,14 @@
                         }
                     },
                     "403": {
-                        "description": "Forbidden – user does not have admin role or permission",
+                        "description": "Forbidden - user lacks necessary role or permission",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "User does not have the right roles."
+                                            "example": "This action is unauthorized."
                                         }
                                     },
                                     "type": "object"
@@ -186,12 +227,23 @@
                                             "example": "The given data was invalid."
                                         },
                                         "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "title": [
-                                                    "The title field is required."
-                                                ]
-                                            }
+                                            "properties": {
+                                                "title": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The title field is required."
+                                                    }
+                                                },
+                                                "content": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The content must be an array."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -212,7 +264,8 @@
                 "tags": [
                     "Courses"
                 ],
-                "summary": "Get full details of a course by ID",
+                "summary": "Get full details of a specific course",
+                "description": "Returns detailed information about a specific course, including chapters and videos. If authenticated, the response includes the user's enrollment status, progress, completed chapters and medal.",
                 "operationId": "fee12cdd5ac7c568500478014248cd1d",
                 "parameters": [
                     {
@@ -241,11 +294,11 @@
                                                 },
                                                 "title": {
                                                     "type": "string",
-                                                    "example": "Test Course"
+                                                    "example": "Laravel Mastery"
                                                 },
                                                 "description": {
                                                     "type": "string",
-                                                    "example": "This is a test course"
+                                                    "example": "Complete Laravel course from beginner to advanced"
                                                 },
                                                 "content": {
                                                     "type": "array",
@@ -253,11 +306,11 @@
                                                         "properties": {
                                                             "title": {
                                                                 "type": "string",
-                                                                "example": "Capítulo 1"
+                                                                "example": "Chapter 1"
                                                             },
                                                             "description": {
                                                                 "type": "string",
-                                                                "example": "Descripción del capítulo 1"
+                                                                "example": "Introduction to Laravel"
                                                             },
                                                             "videos": {
                                                                 "type": "array",
@@ -265,16 +318,15 @@
                                                                     "properties": {
                                                                         "title": {
                                                                             "type": "string",
-                                                                            "example": "Test Video 1"
+                                                                            "example": "Setup Environment"
                                                                         },
                                                                         "description": {
                                                                             "type": "string",
-                                                                            "example": "This is a test video 1"
+                                                                            "example": "Installation steps"
                                                                         },
                                                                         "url": {
                                                                             "type": "string",
-                                                                            "format": "url",
-                                                                            "example": "https://www.youtube.com/watch?v=123456"
+                                                                            "example": "https://www.youtube.com/embed/abc123"
                                                                         }
                                                                     },
                                                                     "type": "object"
@@ -283,6 +335,41 @@
                                                         },
                                                         "type": "object"
                                                     }
+                                                },
+                                                "users": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "progress": {
+                                                    "type": "integer",
+                                                    "example": 100
+                                                },
+                                                "completed": {
+                                                    "type": "string",
+                                                    "example": "[0]"
+                                                },
+                                                "medal": {
+                                                    "type": "string",
+                                                    "example": "gold"
+                                                },
+                                                "is_enrolled": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "auth_user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "user@example.com"
                                                 }
                                             },
                                             "type": "object"
@@ -301,7 +388,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Course not found"
+                                            "example": "No query results for model [App\\\\Models\\\\Course] 999."
                                         }
                                     },
                                     "type": "object"
@@ -313,9 +400,10 @@
             },
             "put": {
                 "tags": [
-                    "Admin - Courses"
+                    "Courses"
                 ],
-                "summary": "Update an existing course (Admin only)",
+                "summary": "Update an existing course",
+                "description": "Allows an authenticated admin user to update an existing course, including its title, description, chapters, and embedded video URLs.",
                 "operationId": "453c1cb3d7a8cadde3674a242bceb96e",
                 "parameters": [
                     {
@@ -342,7 +430,7 @@
                                 "properties": {
                                     "title": {
                                         "type": "string",
-                                        "example": "Updated Course"
+                                        "example": "Updated Laravel Course"
                                     },
                                     "description": {
                                         "type": "string",
@@ -351,6 +439,11 @@
                                     "content": {
                                         "type": "array",
                                         "items": {
+                                            "required": [
+                                                "title",
+                                                "description",
+                                                "videos"
+                                            ],
                                             "properties": {
                                                 "title": {
                                                     "type": "string",
@@ -358,24 +451,28 @@
                                                 },
                                                 "description": {
                                                     "type": "string",
-                                                    "example": "Updated chapter description"
+                                                    "example": "Updated Introduction"
                                                 },
                                                 "videos": {
                                                     "type": "array",
                                                     "items": {
+                                                        "required": [
+                                                            "title",
+                                                            "description",
+                                                            "url"
+                                                        ],
                                                         "properties": {
                                                             "title": {
                                                                 "type": "string",
-                                                                "example": "Video 1"
+                                                                "example": "Updated Video 1"
                                                             },
                                                             "description": {
                                                                 "type": "string",
-                                                                "example": "Updated video description"
+                                                                "example": "Updated description for video 1"
                                                             },
                                                             "url": {
                                                                 "type": "string",
-                                                                "format": "url",
-                                                                "example": "https://www.youtube.com/watch?v=video1"
+                                                                "example": "https://www.youtube.com/watch?v=updated123"
                                                             }
                                                         },
                                                         "type": "object"
@@ -404,7 +501,7 @@
                                         },
                                         "title": {
                                             "type": "string",
-                                            "example": "Updated Course"
+                                            "example": "Updated Laravel Course"
                                         },
                                         "description": {
                                             "type": "string",
@@ -413,6 +510,36 @@
                                         "content": {
                                             "type": "array",
                                             "items": {
+                                                "properties": {
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Updated Chapter 1"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Updated Introduction"
+                                                    },
+                                                    "videos": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "title": {
+                                                                    "type": "string",
+                                                                    "example": "Updated Video 1"
+                                                                },
+                                                                "description": {
+                                                                    "type": "string",
+                                                                    "example": "Updated description for video 1"
+                                                                },
+                                                                "url": {
+                                                                    "type": "string",
+                                                                    "example": "https://www.youtube.com/embed/updated123"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
                                                 "type": "object"
                                             }
                                         }
@@ -423,7 +550,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized – missing or invalid token",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -439,14 +566,14 @@
                         }
                     },
                     "403": {
-                        "description": "Forbidden – user does not have admin role or permission",
+                        "description": "Forbidden - user lacks necessary role or permission",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "User does not have the right roles."
+                                            "example": "This action is unauthorized."
                                         }
                                     },
                                     "type": "object"
@@ -462,7 +589,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "No query results for model [App\\\\Models\\\\Course] 12"
+                                            "example": "No query results for model [App\\\\Models\\\\Course] 999."
                                         }
                                     },
                                     "type": "object"
@@ -481,15 +608,23 @@
                                             "example": "The given data was invalid."
                                         },
                                         "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "content.0.videos.0.title": [
-                                                    "The content.0.videos.0.title must be a string."
-                                                ],
-                                                "content.0.videos.0.description": [
-                                                    "The content.0.videos.0.description must be a string."
-                                                ]
-                                            }
+                                            "properties": {
+                                                "title": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The title field is required."
+                                                    }
+                                                },
+                                                "content": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The content must be an array."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -506,9 +641,10 @@
             },
             "delete": {
                 "tags": [
-                    "Admin - Courses"
+                    "Courses"
                 ],
-                "summary": "Delete a course (Admin only)",
+                "summary": "Delete a course",
+                "description": "Allows an authenticated admin user to delete an existing course by its ID.",
                 "operationId": "7b645feb29b6dc51ef393e0ef5ddecb1",
                 "parameters": [
                     {
@@ -540,7 +676,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized – missing or invalid token",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -556,14 +692,14 @@
                         }
                     },
                     "403": {
-                        "description": "Forbidden – user does not have admin role or permission",
+                        "description": "Forbidden - user lacks necessary role or permission",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "User does not have the right roles."
+                                            "example": "This action is unauthorized."
                                         }
                                     },
                                     "type": "object"
@@ -579,7 +715,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "No query results for model [App\\\\Models\\\\Course] 99"
+                                            "example": "No query results for model [App\\\\Models\\\\Course] 999."
                                         }
                                     },
                                     "type": "object"
@@ -598,9 +734,10 @@
         "/api/login": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Auth"
                 ],
-                "summary": "Authenticate a user and return a token",
+                "summary": "Login a registered user",
+                "description": "Authenticates a user using email and password, and returns an access token if credentials are valid.",
                 "operationId": "3673edffcdc18c06ac5aef5e2219d774",
                 "requestBody": {
                     "required": true,
@@ -615,12 +752,12 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "user@test.com"
+                                        "example": "example@example.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123!"
+                                        "example": "Password123!"
                                     }
                                 },
                                 "type": "object"
@@ -647,37 +784,26 @@
                                                 },
                                                 "username": {
                                                     "type": "string",
-                                                    "example": "test_user"
+                                                    "example": "exampleUser"
                                                 },
                                                 "email": {
                                                     "type": "string",
-                                                    "example": "user@test.com"
-                                                },
-                                                "role": {
-                                                    "type": "string",
-                                                    "example": "user"
-                                                },
-                                                "email_verified_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2025-03-31T15:49:49.000000Z"
+                                                    "example": "example@example.com"
                                                 },
                                                 "created_at": {
                                                     "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2025-03-31T15:49:49.000000Z"
+                                                    "format": "date-time"
                                                 },
                                                 "updated_at": {
                                                     "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2025-03-31T15:49:49.000000Z"
+                                                    "format": "date-time"
                                                 }
                                             },
                                             "type": "object"
                                         },
                                         "token": {
                                             "type": "string",
-                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOi..."
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
                                         }
                                     },
                                     "type": "object"
@@ -712,12 +838,23 @@
                                             "example": "The given data was invalid."
                                         },
                                         "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "email": [
-                                                    "The email field is required."
-                                                ]
-                                            }
+                                            "properties": {
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email field is required."
+                                                    }
+                                                },
+                                                "password": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The password field is required."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -731,9 +868,10 @@
         "/api/register": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Auth"
                 ],
                 "summary": "Register a new user",
+                "description": "Creates a new user account and returns an access token. The user will be automatically assigned the 'user' role.",
                 "operationId": "748a1acc92fb3e56f8f6ace55b5a9d24",
                 "requestBody": {
                     "required": true,
@@ -749,22 +887,22 @@
                                 "properties": {
                                     "username": {
                                         "type": "string",
-                                        "example": "test_user"
+                                        "example": "exampleUser"
                                     },
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "test@test.com"
+                                        "example": "example@email.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123!"
+                                        "example": "Password123!"
                                     },
                                     "password_confirmation": {
                                         "type": "string",
                                         "format": "password",
-                                        "example": "password123!"
+                                        "example": "Password123!"
                                     }
                                 },
                                 "type": "object"
@@ -779,16 +917,38 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully"
+                                        },
                                         "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "exampleUser"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "example@email.com"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
                                             "type": "object"
                                         },
-                                        "access_token": {
+                                        "token": {
                                             "type": "string",
-                                            "example": "eyJ0eXAiOiJKV1QiLCJh..."
-                                        },
-                                        "token_type": {
-                                            "type": "string",
-                                            "example": "Bearer"
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGci..."
                                         }
                                     },
                                     "type": "object"
@@ -807,15 +967,30 @@
                                             "example": "The given data was invalid."
                                         },
                                         "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "email": [
-                                                    "The email field is required."
-                                                ],
-                                                "password": [
-                                                    "The password must be at least 8 characters."
-                                                ]
-                                            }
+                                            "properties": {
+                                                "username": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The username must be at least 2 characters."
+                                                    }
+                                                },
+                                                "email": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The email has already been taken."
+                                                    }
+                                                },
+                                                "password": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The password confirmation does not match."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -831,32 +1006,34 @@
                 "tags": [
                     "Progress"
                 ],
-                "summary": "Marcar capítulo como completado",
-                "description": "Permite a un usuario marcar un capítulo como completado y actualizar su progreso en el curso.",
-                "operationId": "completeChapter",
+                "summary": "Mark chapter as completed",
+                "description": "Marks a chapter as completed for the authenticated user. Updates the user's progress and assigns a medal based on the percentage of completion. Requires the user to be enrolled in the course.",
+                "operationId": "009e9638932120c7d5220b4841c0c6f7",
                 "parameters": [
                     {
                         "name": "courseId",
                         "in": "path",
-                        "description": "ID del curso",
+                        "description": "ID of the course",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 1
                         }
                     },
                     {
                         "name": "chapterIndex",
                         "in": "path",
-                        "description": "Índice del capítulo (comienza en 0)",
+                        "description": "Index of the chapter to complete (starting from 0)",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "example": 0
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Capítulo completado correctamente",
+                        "description": "Chapter marked as completed",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -868,6 +1045,16 @@
                                         "progress": {
                                             "type": "integer",
                                             "example": 100
+                                        },
+                                        "completed_chapters": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "medal": {
+                                            "type": "string",
+                                            "example": "gold"
                                         }
                                     },
                                     "type": "object"
@@ -876,7 +1063,7 @@
                         }
                     },
                     "400": {
-                        "description": "Capítulo ya completado",
+                        "description": "Chapter already completed",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -891,24 +1078,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Usuario no inscrito en el curso o sin rol adecuado",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "You are not enrolled in this course."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
                     "401": {
-                        "description": "Token ausente o inválido",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -923,8 +1094,24 @@
                             }
                         }
                     },
+                    "403": {
+                        "description": "Forbidden - user not enrolled in the course or lacks 'user' role",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You are not enrolled in this course."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
                     "404": {
-                        "description": "Curso no encontrado",
+                        "description": "Course not found",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -950,13 +1137,14 @@
         "/api/users": {
             "get": {
                 "tags": [
-                    "Admin"
+                    "Users"
                 ],
-                "summary": "Get all users and their courses",
+                "summary": "Get all users with their enrolled courses",
+                "description": "Returns a list of all users with their associated courses, including progress and medal. Only accessible to authenticated admin users.",
                 "operationId": "a5c2f85f763142435e660e6d2fa26c42",
                 "responses": {
                     "200": {
-                        "description": "List of all users with their enrolled courses",
+                        "description": "Users retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -971,11 +1159,11 @@
                                                     },
                                                     "username": {
                                                         "type": "string",
-                                                        "example": "test_user"
+                                                        "example": "adminuser"
                                                     },
                                                     "email": {
                                                         "type": "string",
-                                                        "example": "user@test.com"
+                                                        "example": "admin@example.com"
                                                     },
                                                     "courses": {
                                                         "type": "array",
@@ -987,7 +1175,7 @@
                                                                 },
                                                                 "title": {
                                                                     "type": "string",
-                                                                    "example": "Test Course"
+                                                                    "example": "Laravel Basics"
                                                                 },
                                                                 "description": {
                                                                     "type": "string",
@@ -995,7 +1183,7 @@
                                                                 },
                                                                 "progress": {
                                                                     "type": "integer",
-                                                                    "example": 75
+                                                                    "example": 80
                                                                 },
                                                                 "medal": {
                                                                     "type": "string",
@@ -1032,7 +1220,7 @@
                         }
                     },
                     "403": {
-                        "description": "Forbidden - user does not have the required role or permission",
+                        "description": "Forbidden - user does not have admin role",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1058,15 +1246,16 @@
         "/api/users/{user}": {
             "get": {
                 "tags": [
-                    "Admin & User - User Info"
+                    "Users"
                 ],
-                "summary": "Get information about a user",
+                "summary": "Get user information",
+                "description": "Returns the authenticated user's information and their enrolled courses. Admin users can view any user's data. Regular users can only access their own information.",
                 "operationId": "262f0d426b89aa759fd6d0ec14b1441c",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "path",
-                        "description": "User ID to retrieve information",
+                        "description": "ID of the user to retrieve",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -1076,7 +1265,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User data retrieved successfully",
+                        "description": "User information retrieved successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1087,13 +1276,13 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "name": {
+                                                "username": {
                                                     "type": "string",
-                                                    "example": "test_user"
+                                                    "example": "exampleUser"
                                                 },
                                                 "email": {
                                                     "type": "string",
-                                                    "example": "test@test.com"
+                                                    "example": "user@example.com"
                                                 },
                                                 "courses": {
                                                     "type": "array",
@@ -1105,7 +1294,7 @@
                                                             },
                                                             "title": {
                                                                 "type": "string",
-                                                                "example": "Curso A"
+                                                                "example": "Laravel Basics"
                                                             },
                                                             "progress": {
                                                                 "type": "integer",
@@ -1129,7 +1318,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized – Missing or invalid token",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1145,7 +1334,7 @@
                         }
                     },
                     "403": {
-                        "description": "Forbidden – Not allowed to access this user data",
+                        "description": "Forbidden - user lacks permission to view this resource",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1185,29 +1374,29 @@
             },
             "delete": {
                 "tags": [
-                    "User"
+                    "Users"
                 ],
-                "summary": "Delete a user account",
-                "description": "Allows a user to delete their own account. Only accessible with role:user and permission:delete-account.",
+                "summary": "Delete the authenticated user's account",
+                "description": "Allows a user to delete **only their own account**. Also deletes all access tokens associated with the user. Requires authentication and 'user' role.",
                 "operationId": "13daad2fcf4391d3639248d2e7380d65",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "path",
-                        "description": "User ID",
+                        "description": "ID of the user to delete (must match the authenticated user)",
                         "required": true,
                         "schema": {
                             "type": "integer",
-                            "example": 5
+                            "example": 1
                         }
                     }
                 ],
                 "responses": {
                     "204": {
-                        "description": "Account deleted successfully (no content)"
+                        "description": "User account deleted successfully. No content is returned."
                     },
                     "401": {
-                        "description": "Unauthorized - Token missing or invalid",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1223,7 +1412,7 @@
                         }
                     },
                     "403": {
-                        "description": "Forbidden - Cannot delete other user or missing role",
+                        "description": "Forbidden - trying to delete another user's account or lacking role",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1246,7 +1435,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "No query results for model [App\\\\Models\\\\User] 999"
+                                            "example": "No query results for model [App\\\\Models\\\\User] 999."
                                         }
                                     },
                                     "type": "object"
@@ -1265,11 +1454,11 @@
         "/api/courses/{course}/enroll": {
             "post": {
                 "tags": [
-                    "Courses"
+                    "User Courses"
                 ],
-                "summary": "Enroll user in a course",
-                "description": "Allows an authenticated user with role 'user' and permission 'enroll-course' to enroll in a course. Returns 409 if already enrolled.",
-                "operationId": "enrollCourse",
+                "summary": "Enroll in a course",
+                "description": "Allows an authenticated user with the 'user' role and appropriate permission to enroll in a course. Returns a confirmation message or a conflict if already enrolled.",
+                "operationId": "35395c3a130a1aa77c0f2a84a5889678",
                 "parameters": [
                     {
                         "name": "course",
@@ -1284,7 +1473,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Enrollment successful",
+                        "description": "Enrolled successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1300,7 +1489,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized - Missing or invalid token",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1315,24 +1504,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden - User lacks role or permission",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User does not have the right roles."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
                     "409": {
-                        "description": "Conflict - Already enrolled",
+                        "description": "Conflict - user already enrolled in course",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1340,6 +1513,22 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have already enrolled in the course"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\\\Models\\\\Course] 999"
                                         }
                                     },
                                     "type": "object"
@@ -1358,11 +1547,11 @@
         "/api/courses/{course}/unenroll": {
             "post": {
                 "tags": [
-                    "Courses"
+                    "User Courses"
                 ],
-                "summary": "Unenroll user from a course",
-                "description": "Allows an authenticated user with role 'user' and permission 'unenroll-course' to unenroll from a course. Returns 409 if the user is not enrolled.",
-                "operationId": "unenrollCourse",
+                "summary": "Unenroll from a course",
+                "description": "Allows an authenticated user to unenroll from a course they are currently enrolled in. Returns a confirmation message or a conflict if the user is not enrolled.",
+                "operationId": "d4b3ff6645ff73cc026c51c4274f5707",
                 "parameters": [
                     {
                         "name": "course",
@@ -1377,7 +1566,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Unenrollment successful",
+                        "description": "Unenrolled successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1393,7 +1582,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized - Missing or invalid token",
+                        "description": "Unauthorized - missing or invalid token",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1408,24 +1597,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden - User lacks role or permission",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "User does not have the right roles."
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
                     "409": {
-                        "description": "Conflict - User not enrolled",
+                        "description": "Conflict - user is not enrolled in the course",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1433,6 +1606,22 @@
                                         "message": {
                                             "type": "string",
                                             "example": "You have not enrolled in the course"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No query results for model [App\\\\Models\\\\Course] 999"
                                         }
                                     },
                                     "type": "object"
@@ -1451,32 +1640,24 @@
     },
     "tags": [
         {
-            "name": "Admin - Courses",
-            "description": "Admin - Courses"
-        },
-        {
-            "name": "Authentication",
-            "description": "Authentication"
-        },
-        {
             "name": "Courses",
             "description": "Courses"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
         },
         {
             "name": "Progress",
             "description": "Progress"
         },
         {
-            "name": "Admin",
-            "description": "Admin"
+            "name": "Users",
+            "description": "Users"
         },
         {
-            "name": "Admin & User - User Info",
-            "description": "Admin & User - User Info"
-        },
-        {
-            "name": "User",
-            "description": "User"
+            "name": "User Courses",
+            "description": "User Courses"
         }
     ]
 }

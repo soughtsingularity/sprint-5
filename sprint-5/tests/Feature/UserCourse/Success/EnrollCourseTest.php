@@ -38,7 +38,4 @@ class EnrollCourseTest extends ApiTestCase
             'user_id' => $user->id,
         ]);
     }
-
-
-
 }
