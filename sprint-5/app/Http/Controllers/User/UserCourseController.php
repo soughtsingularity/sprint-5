@@ -9,7 +9,7 @@ use App\Models\Course;
 class UserCourseController extends Controller
 {
 
-        /**
+    /**
      * @OA\Post(
      *     path="/api/courses/{course}/enroll",
      *     summary="Enroll in a course",
@@ -32,7 +32,6 @@ class UserCourseController extends Controller
      *             @OA\Property(property="message", type="string", example="You have successfully enrolled in the course")
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=401,
      *         description="Unauthorized - missing or invalid token",
@@ -40,12 +39,18 @@ class UserCourseController extends Controller
      *             @OA\Property(property="message", type="string", example="Unauthenticated.")
      *         )
      *     ),
-     *
      *     @OA\Response(
      *         response=409,
      *         description="Conflict - user already enrolled in course",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="You have already enrolled in the course")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Course not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Course] 999")
      *         )
      *     )
      * )
@@ -55,6 +60,7 @@ class UserCourseController extends Controller
      * - Content-Type: application/json
      * - Authorization: Bearer {token}
      */
+
 
 
     public function enroll(Course $course)
@@ -115,6 +121,13 @@ class UserCourseController extends Controller
      *         description="Conflict - user is not enrolled in the course",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="You have not enrolled in the course")
+     *         )
+     *     ),
+     *  *     @OA\Response(
+     *         response=404,
+     *         description="Course not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Course] 999")
      *         )
      *     )
      * )

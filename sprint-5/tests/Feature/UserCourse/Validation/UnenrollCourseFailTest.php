@@ -62,4 +62,24 @@ class UnenrollCourseFailTest extends ApiTestCase
                 'message' => 'You have not enrolled in the course',
             ]);
     }
+
+    public function test_enroll_course_in_nonexistent_course()
+    {
+        $user = User::factory()->create();
+        $course = Course::factory()->create();
+        $user->assignRole('user');
+        $user->givePermissionTo('enroll-course');
+
+        $token = $user->createToken('authToken')->accessToken;
+
+        $nonExistentCourseId = $course->id + 1;
+
+        $response = $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+        ])->postJson("/api/courses/{$nonExistentCourseId}/enroll");
+
+        $response->assertStatus(404);
+    }
+
+
 }
